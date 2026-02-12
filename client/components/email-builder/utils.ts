@@ -19,6 +19,7 @@ import {
   SpacerBlock,
   CenteredImageCardBlock,
   SplitImageCardBlock,
+  PromoBlock,
 } from "./types";
 import { compileHTML, sanitizeHTML } from "./htmlCompiler";
 
@@ -584,21 +585,27 @@ export function createTwoColumnCardBlock() {
   };
 }
 
-export function createPromoBlock(): HtmlBlock {
+export function createPromoBlock(): PromoBlock {
   return {
-    type: "html",
+    type: "promo",
     id: generateId(),
-    content: `<div style="background-color: #f9f9f9; padding: 40px 20px; text-align: center; border-radius: 8px; margin: 20px 0;">
-      <p style="margin: 0 0 12px 0; font-size: 16px; color: #666;">Save 15% on your next order!</p>
-      <h2 style="margin: 0; font-size: 36px; font-weight: bold; color: #000; letter-spacing: 2px;">PROMO15</h2>
-    </div>`,
+    promoText: "Save 15% on your next order!",
+    promoCode: "PROMO15",
+    fontSize: 16,
+    promoCodeFontSize: 36,
+    fontColor: "#666666",
+    promoCodeColor: "#000000",
+    backgroundColor: "#f9f9f9",
+    alignment: "center",
+    fontWeight: "bold",
+    letterSpacing: 2,
     width: 100,
     widthUnit: "%",
-    padding: 0,
-    margin: 0,
+    padding: 40,
+    margin: 20,
     borderWidth: 0,
     borderColor: "#000000",
-    borderRadius: 0,
+    borderRadius: 8,
     visibility: "all",
   };
 }
@@ -902,6 +909,18 @@ export function renderBlockToHTML(block: ContentBlock): string {
       const sanitized = sanitizeHTML(htmlBlock.content);
       const compiled = compileHTML(sanitized);
       return `<div style="width: ${htmlBlock.width}${htmlBlock.widthUnit}; padding: ${htmlBlock.padding}px; margin: ${htmlBlock.margin}px;">${compiled}</div>`;
+    }
+    case "promo": {
+      const promoBlock = block as PromoBlock;
+      const width = `${promoBlock.width}${promoBlock.widthUnit}`;
+      const borderStyle =
+        promoBlock.borderWidth > 0
+          ? `border: ${promoBlock.borderWidth}px solid ${promoBlock.borderColor};`
+          : "";
+      return `<div style="background-color: ${promoBlock.backgroundColor}; padding: ${promoBlock.padding}px; text-align: ${promoBlock.alignment}; border-radius: ${promoBlock.borderRadius}px; margin: ${promoBlock.margin}px auto; width: ${width}; ${borderStyle}">
+        <p style="margin: 0 0 12px 0; font-size: ${promoBlock.fontSize}px; color: ${promoBlock.fontColor};">${promoBlock.promoText}</p>
+        <h2 style="margin: 0; font-size: ${promoBlock.promoCodeFontSize}px; font-weight: ${promoBlock.fontWeight}; color: ${promoBlock.promoCodeColor}; letter-spacing: ${promoBlock.letterSpacing}px;">${promoBlock.promoCode}</h2>
+      </div>`;
     }
     case "twoColumnCard": {
       const twoColBlock = block as any;

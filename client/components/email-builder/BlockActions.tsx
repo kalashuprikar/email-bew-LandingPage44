@@ -24,6 +24,7 @@ import {
   createDynamicContentBlock,
   createCenteredImageCardBlock,
   createSplitImageCardBlock,
+  createPromoBlock,
 } from "./utils";
 
 interface BlockActionsProps {
@@ -92,6 +93,9 @@ export const BlockActions: React.FC<BlockActionsProps> = ({
         break;
       case "splitImageCard":
         newBlock = createSplitImageCardBlock();
+        break;
+      case "promo":
+        newBlock = createPromoBlock();
         break;
       default:
         newBlock = createTextBlock();
@@ -167,6 +171,9 @@ export const BlockActions: React.FC<BlockActionsProps> = ({
             onClick={() => handleAddBlockType("splitImageCard")}
           >
             Image Card (Split)
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleAddBlockType("promo")}>
+            Promo Code
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

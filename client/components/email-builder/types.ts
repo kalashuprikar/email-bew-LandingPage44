@@ -16,7 +16,8 @@ export type BlockType =
   | "splitImageCard"
   | "twoColumnCard"
   | "stats"
-  | "features";
+  | "features"
+  | "promo";
 
 export interface TitleBlock {
   type: "title";
@@ -474,6 +475,29 @@ export interface FeaturesBlock {
   visibility: "all" | "desktop" | "mobile";
 }
 
+export interface PromoBlock {
+  type: "promo";
+  id: string;
+  promoText: string;
+  promoCode: string;
+  fontSize: number;
+  promoCodeFontSize: number;
+  fontColor: string;
+  promoCodeColor: string;
+  backgroundColor: string;
+  alignment: "left" | "center" | "right";
+  fontWeight: "normal" | "bold";
+  letterSpacing: number;
+  width: number;
+  widthUnit: "px" | "%";
+  padding: number;
+  margin: number;
+  borderWidth: number;
+  borderColor: string;
+  borderRadius: number;
+  visibility: "all" | "desktop" | "mobile";
+}
+
 export type ContentBlock =
   | TitleBlock
   | TextBlock
@@ -495,7 +519,8 @@ export type ContentBlock =
   | SplitImageCardBlock
   | TwoColumnCardBlock
   | StatsBlock
-  | FeaturesBlock;
+  | FeaturesBlock
+  | PromoBlock;
 
 export interface EmailTemplate {
   id: string;
