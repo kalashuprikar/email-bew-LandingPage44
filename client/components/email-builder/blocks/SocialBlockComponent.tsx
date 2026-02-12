@@ -83,7 +83,13 @@ export const SocialBlockComponent: React.FC<SocialBlockComponentProps> = ({
         : "justify-center";
 
   const width =
-    block.widthUnit === "%" ? `${block.width}%` : `${block.width}px`;
+    typeof block.width === "string" && block.width === "auto"
+      ? "auto"
+      : block.widthUnit === "%"
+        ? `${block.width}%`
+        : `${block.width}px`;
+
+  const isInlineDisplay = (block as any).displayMode === "inline";
 
   const borderRadius = getShapeStyle(block.shape, iconSize);
 
@@ -112,11 +118,13 @@ export const SocialBlockComponent: React.FC<SocialBlockComponentProps> = ({
         width: width,
         padding: `${block.padding}px`,
         margin: `${block.margin}px`,
+        display: isInlineDisplay ? "inline-block" : "block",
+        verticalAlign: "top",
       }}
     >
       <div
-        className={`flex gap-${block.spacing} ${justifyClass}`}
-        style={{ gap: `${block.spacing}px` }}
+        className={`flex ${justifyClass}`}
+        style={{ gap: `${block.spacing}px`, display: "flex", flexDirection: "row" }}
       >
         {block.platforms.map((platform) => {
           const icon = getSocialIcon(platform.name, iconSize);

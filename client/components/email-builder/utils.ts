@@ -466,13 +466,14 @@ export function createHeaderLogoAndSocialTemplate(): ContentBlock[] {
     width: 149,
     height: 36,
     widthUnit: "px",
-    alignment: "center",
-    padding: 0,
+    alignment: "left",
+    padding: 20,
     margin: 0,
     borderWidth: 0,
     borderColor: "#000000",
     borderRadius: 0,
     visibility: "all",
+    displayMode: "inline", // Add display mode for side-by-side layout
   };
 
   const socialBlock: SocialBlock = {
@@ -484,19 +485,20 @@ export function createHeaderLogoAndSocialTemplate(): ContentBlock[] {
       { name: "LinkedIn", url: "#", icon: "linkedin" },
       { name: "YouTube", url: "#", icon: "youtube" },
     ],
-    alignment: "center",
+    alignment: "right",
     size: "small",
     shape: "rounded",
     theme: "colored",
     spacing: 8,
-    width: 100,
-    widthUnit: "%",
-    padding: 15,
+    width: "auto",
+    widthUnit: "px",
+    padding: 20,
     margin: 0,
     borderWidth: 0,
     borderColor: "#000000",
     borderRadius: 4,
     visibility: "all",
+    displayMode: "inline", // Add display mode for side-by-side layout
   };
 
   return [logoBlock, socialBlock];

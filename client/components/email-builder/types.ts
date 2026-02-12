@@ -126,6 +126,7 @@ export interface LogoBlock {
   borderColor: string;
   borderRadius: number;
   visibility: "all" | "desktop" | "mobile";
+  displayMode?: "inline" | "block";
 }
 
 export interface SocialBlock {
@@ -141,7 +142,7 @@ export interface SocialBlock {
   shape: "rounded" | "circle" | "square";
   theme: "colored" | "outlined" | "solid";
   spacing: number;
-  width: number;
+  width: number | string;
   widthUnit: "px" | "%";
   padding: number;
   margin: number;
@@ -149,6 +150,7 @@ export interface SocialBlock {
   borderColor: string;
   borderRadius: number;
   visibility: "all" | "desktop" | "mobile";
+  displayMode?: "inline" | "block";
 }
 
 export interface HtmlBlock {

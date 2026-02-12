@@ -135,29 +135,84 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
             </div>
           ) : (
             <div className="space-y-0">
-              {template.blocks.map((block, index) => (
-                <DraggableBlock
-                  key={block.id}
-                  block={block}
-                  index={index}
-                  totalBlocks={template.blocks.length}
-                  isSelected={selectedBlockId === block.id}
-                  isEditing={editingBlockId === block.id}
-                  selectedFooterElement={selectedFooterElement}
-                  onBlockUpdate={onBlockUpdate}
-                  onBlockSelect={onBlockSelect}
-                  onEditingBlockChange={onEditingBlockChange}
-                  onFooterElementSelect={onFooterElementSelect}
-                  onMoveBlock={onMoveBlock}
-                  onAddBlock={(newBlock, position) => {
-                    onAddBlock(newBlock, position);
-                  }}
-                  onDuplicate={(blockToDuplicate, position) => {
-                    onDuplicateBlock?.(blockToDuplicate, position);
-                  }}
-                  onDelete={(blockId) => onDeleteBlock?.(blockId)}
-                />
-              ))}
+              {template.blocks.map((block, index) => {
+                const isInlineDisplay = (block as any).displayMode === "inline";
+                const nextBlock = template.blocks[index + 1];
+                const nextIsInline = nextBlock && (nextBlock as any).displayMode === "inline";
+                const prevBlock = template.blocks[index - 1];
+                const prevIsInline = prevBlock && (prevBlock as any).displayMode === "inline";
+
+                // Skip if this block is inline and we're not at the start of an inline sequence
+                if (isInlineDisplay && prevIsInline) {
+                  return null;
+                }
+
+                // If this is the start of an inline sequence, create a wrapper
+                if (isInlineDisplay) {
+                  const inlineBlocks = [block];
+                  let currentIndex = index + 1;
+                  while (
+                    currentIndex < template.blocks.length &&
+                    (template.blocks[currentIndex] as any).displayMode === "inline"
+                  ) {
+                    inlineBlocks.push(template.blocks[currentIndex]);
+                    currentIndex++;
+                  }
+
+                  return (
+                    <div key={`inline-group-${block.id}`} className="flex w-full">
+                      {inlineBlocks.map((inlineBlock, i) => (
+                        <div key={inlineBlock.id} className="flex-1">
+                          <DraggableBlock
+                            block={inlineBlock}
+                            index={index + i}
+                            totalBlocks={template.blocks.length}
+                            isSelected={selectedBlockId === inlineBlock.id}
+                            isEditing={editingBlockId === inlineBlock.id}
+                            selectedFooterElement={selectedFooterElement}
+                            onBlockUpdate={onBlockUpdate}
+                            onBlockSelect={onBlockSelect}
+                            onEditingBlockChange={onEditingBlockChange}
+                            onFooterElementSelect={onFooterElementSelect}
+                            onMoveBlock={onMoveBlock}
+                            onAddBlock={(newBlock, position) => {
+                              onAddBlock(newBlock, position);
+                            }}
+                            onDuplicate={(blockToDuplicate, position) => {
+                              onDuplicateBlock?.(blockToDuplicate, position);
+                            }}
+                            onDelete={(blockId) => onDeleteBlock?.(blockId)}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  );
+                }
+
+                return (
+                  <DraggableBlock
+                    key={block.id}
+                    block={block}
+                    index={index}
+                    totalBlocks={template.blocks.length}
+                    isSelected={selectedBlockId === block.id}
+                    isEditing={editingBlockId === block.id}
+                    selectedFooterElement={selectedFooterElement}
+                    onBlockUpdate={onBlockUpdate}
+                    onBlockSelect={onBlockSelect}
+                    onEditingBlockChange={onEditingBlockChange}
+                    onFooterElementSelect={onFooterElementSelect}
+                    onMoveBlock={onMoveBlock}
+                    onAddBlock={(newBlock, position) => {
+                      onAddBlock(newBlock, position);
+                    }}
+                    onDuplicate={(blockToDuplicate, position) => {
+                      onDuplicateBlock?.(blockToDuplicate, position);
+                    }}
+                    onDelete={(blockId) => onDeleteBlock?.(blockId)}
+                  />
+                );
+              })}
             </div>
           )}
         </div>
