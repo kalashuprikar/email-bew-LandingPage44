@@ -50,12 +50,13 @@ export const HeaderBlockComponent: React.FC<HeaderBlockComponentProps> = ({
         style={{
           display: "flex",
           alignItems: "center",
+          justifyContent: "space-between",
           width: "100%",
-          flexWrap: "nowrap",
+          gap: "20px",
         }}
       >
         {/* Logo */}
-        <div style={{ flexGrow: 0, flexShrink: 0, marginRight: "auto" }}>
+        <div style={{ flex: "0 0 auto" }}>
           {block.logo ? (
             <img
               src={block.logo}
@@ -100,8 +101,7 @@ export const HeaderBlockComponent: React.FC<HeaderBlockComponentProps> = ({
           display: "flex",
           gap: "12px",
           alignItems: "center",
-          flexGrow: 0,
-          flexShrink: 0,
+          flex: "0 0 auto",
         }}>
           {block.links.length > 0 ? (
             block.links.map((link, index) => (
