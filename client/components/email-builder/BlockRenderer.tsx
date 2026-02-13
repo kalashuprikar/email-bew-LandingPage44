@@ -244,6 +244,8 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             isSelected={isSelected}
             onBlockUpdate={(updatedBlock) => onBlockUpdate(updatedBlock)}
             blockIndex={blockIndex}
+            onDuplicate={onDuplicate}
+            onDelete={onDelete}
           />
         </div>
       );
@@ -255,6 +257,8 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             isSelected={isSelected}
             onBlockUpdate={(updatedBlock) => onBlockUpdate(updatedBlock)}
             blockIndex={blockIndex}
+            onDuplicate={onDuplicate}
+            onDelete={onDelete}
           />
         </div>
       );
@@ -278,6 +282,9 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             block={block as any}
             isSelected={isSelected}
             onUpdate={(updatedBlock) => onBlockUpdate(updatedBlock)}
+            onDuplicate={onDuplicate}
+            onDelete={onDelete}
+            blockIndex={blockIndex}
           />
         </div>
       );
@@ -288,6 +295,9 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             block={block as any}
             isSelected={isSelected}
             onUpdate={(updatedBlock) => onBlockUpdate(updatedBlock)}
+            onDuplicate={onDuplicate}
+            onDelete={onDelete}
+            blockIndex={blockIndex}
           />
         </div>
       );

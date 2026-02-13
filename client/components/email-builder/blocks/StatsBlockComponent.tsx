@@ -9,12 +9,18 @@ interface StatsBlockComponentProps {
   block: StatsBlock;
   isSelected: boolean;
   onUpdate: (block: StatsBlock) => void;
+  onDuplicate?: (block: StatsBlock, position: number) => void;
+  onDelete?: (blockId: string) => void;
+  blockIndex?: number;
 }
 
 export const StatsBlockComponent: React.FC<StatsBlockComponentProps> = ({
   block,
   isSelected,
   onUpdate,
+  onDuplicate,
+  onDelete,
+  blockIndex = 0,
 }) => {
   const [editMode, setEditMode] = useState<string | null>(null);
   const [hoveredFieldId, setHoveredFieldId] = useState<string | null>(null);
@@ -342,6 +348,36 @@ export const StatsBlockComponent: React.FC<StatsBlockComponentProps> = ({
           </div>
         );
       })}
+
+      {/* Block Actions */}
+      {isSelected && (onDuplicate || onDelete) && (
+        <div className="flex items-center justify-center gap-2 mt-4 py-2">
+          {onDuplicate && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 px-3 hover:bg-gray-100 border border-gray-200"
+              title="Duplicate this stats block"
+              onClick={() => onDuplicate(block, blockIndex + 1)}
+            >
+              <Copy className="w-4 h-4 mr-2" />
+              Copy
+            </Button>
+          )}
+          {onDelete && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 px-3 hover:bg-red-50 border border-red-200"
+              title="Delete this stats block"
+              onClick={() => onDelete(block.id)}
+            >
+              <Trash2 className="w-4 h-4 mr-2 text-red-600" />
+              Delete
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 };
