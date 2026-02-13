@@ -745,7 +745,7 @@ export const TwoColumnCardBlockComponent: React.FC<
               {/* Content Section - Droppable */}
               <div
                 ref={contentRef}
-                className={`flex-1 overflow-visible flex flex-col transition-colors ${
+                className={`flex-1 overflow-auto flex flex-col transition-colors ${
                   isOverContent ? "bg-orange-50" : "bg-white"
                 }`}
                 style={{
@@ -976,9 +976,9 @@ export const TwoColumnCardBlockComponent: React.FC<
 
                 {/* Nested Blocks - Rendered inside card */}
                 {card.blocks && card.blocks.length > 0 && (
-                  <div className="space-y-3 mt-3 pt-2 border-t border-gray-200">
+                  <div className="space-y-3 mt-3 pt-2 border-t border-gray-200 w-full">
                     {card.blocks.map((nestedBlock) => (
-                      <div key={nestedBlock.id} className="relative group">
+                      <div key={nestedBlock.id} className="relative group w-full max-w-full overflow-hidden">
                         <BlockRenderer
                           block={nestedBlock}
                           isSelected={false}
