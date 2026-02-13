@@ -3,7 +3,6 @@ import { Copy, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FooterWithSocialBlock } from "../types";
 import { SocialBlockComponent } from "./SocialBlockComponent";
-import { toast } from "sonner";
 
 interface FooterWithSocialBlockComponentProps {
   block: FooterWithSocialBlock;
@@ -76,14 +75,10 @@ export const FooterWithSocialBlockComponent: React.FC<
         textToCopy = block.unsubscribeLink.text;
       }
 
-      // Copy to clipboard
+      // Copy to clipboard silently
       navigator.clipboard.writeText(textToCopy);
-
-      // Show success toast
-      toast.success("Copied to clipboard!");
     } catch (err) {
       console.error("Failed to copy:", err);
-      toast.error("Failed to copy");
     }
   };
 
