@@ -311,7 +311,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
             </h1>
           )}
 
-          {selectedElement === "heading" && !isEditingHeading && (
+          {selectedElement === "heading" && (
             <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white rounded-lg border border-valasys-orange p-2 z-50 mt-2">
               <button
                 className="h-8 w-8 p-0 hover:bg-orange-50 hover:text-valasys-orange transition-colors flex items-center justify-center rounded"
@@ -427,7 +427,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
             </p>
           )}
 
-          {selectedElement === "subheading" && !isEditingSubheading && (
+          {selectedElement === "subheading" && (
             <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white rounded-lg border border-valasys-orange p-2 z-50 mt-2">
               <button
                 className="h-8 w-8 p-0 hover:bg-orange-50 hover:text-valasys-orange transition-colors flex items-center justify-center rounded"
@@ -545,7 +545,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
             </button>
           )}
 
-          {selectedElement === "button" && !isEditingButton && (
+          {selectedElement === "button" && (
             <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white rounded-lg border border-valasys-orange p-2 z-50 mt-2">
               <button
                 className="h-8 w-8 p-0 hover:bg-orange-50 hover:text-valasys-orange transition-colors flex items-center justify-center rounded"
