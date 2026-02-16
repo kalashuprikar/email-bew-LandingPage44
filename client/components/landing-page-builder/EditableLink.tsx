@@ -31,8 +31,8 @@ export const EditableLink: React.FC<EditableLinkProps> = ({
     return (
       <div
         className="cursor-pointer hover:opacity-70 transition-opacity"
-        onClick={() => setIsEditing(true)}
-        title="Click to edit"
+        onDoubleClick={() => setIsEditing(true)}
+        title="Double click to edit"
       >
         {inline ? <span>{label}</span> : <a href={href}>{label}</a>}
       </div>
