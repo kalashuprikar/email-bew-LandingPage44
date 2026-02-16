@@ -66,7 +66,7 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
                 }
               }}
               onClick={(e) => e.stopPropagation()}
-              className="font-bold text-gray-900 px-2 py-1 border border-orange-300 rounded focus:outline-none"
+              className="font-bold text-gray-900 px-2 py-1 border border-orange-300 rounded focus:outline-none w-24"
               autoFocus
             />
           ) : (
