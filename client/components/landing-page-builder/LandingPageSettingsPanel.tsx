@@ -332,19 +332,33 @@ export const LandingPageSettingsPanel: React.FC<
       <div>
         <Label className="text-sm font-medium">Width</Label>
         <Input
+          type="text"
           value={localProps.width || "100%"}
-          onChange={(e) => updateProperty("width", e.target.value)}
+          onChange={(e) => {
+            const val = e.target.value;
+            if (val.trim()) {
+              updateProperty("width", val);
+            }
+          }}
           placeholder="100% or 1200px"
         />
+        <p className="text-xs text-gray-500 mt-1">Enter as percentage (100%) or pixels (1200px)</p>
       </div>
 
       <div>
         <Label className="text-sm font-medium">Min Height</Label>
         <Input
+          type="text"
           value={localProps.minHeight || "500px"}
-          onChange={(e) => updateProperty("minHeight", e.target.value)}
+          onChange={(e) => {
+            const val = e.target.value;
+            if (val.trim()) {
+              updateProperty("minHeight", val);
+            }
+          }}
           placeholder="500px"
         />
+        <p className="text-xs text-gray-500 mt-1">Enter in pixels (e.g., 500px, 600px)</p>
       </div>
 
       <div>
