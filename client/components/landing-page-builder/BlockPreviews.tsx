@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Copy, Trash2 } from "lucide-react";
 import { LandingPageBlock } from "./types";
 import { EditableLink } from "./EditableLink";
 
@@ -252,16 +252,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
       <div className="flex flex-col items-center justify-center h-full px-4 md:px-8 py-8 md:py-16 text-center">
         {/* Heading */}
         <div
-          className={`relative mb-4 px-4 py-2 rounded transition-all ${
-            selectedElement === "heading" ? "border-2 border-solid border-valasys-orange" :
-            hoveredElement === "heading" ? "border-2 border-dashed border-valasys-orange" : ""
-          }`}
-          onMouseEnter={() => setHoveredElement("heading")}
-          onMouseLeave={() => setHoveredElement(null)}
-          onClick={(e) => {
-            e.stopPropagation();
-            setSelectedElement("heading");
-          }}
+          className={`relative mb-4 px-4 py-2 rounded transition-all`}
         >
           {isEditingHeading ? (
             <input
@@ -293,44 +284,11 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
             </h1>
           )}
 
-          {selectedElement === "heading" && !isEditingHeading && (
-            <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white rounded-lg border border-valasys-orange p-2 z-50 mt-2">
-              <button
-                className="h-8 w-8 p-0 hover:bg-orange-50 hover:text-valasys-orange transition-colors flex items-center justify-center rounded"
-                title="Copy heading"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleCopyHeading();
-                }}
-              >
-                <Copy className="w-4 h-4" />
-              </button>
-              <button
-                className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600 transition-colors flex items-center justify-center rounded"
-                title="Delete heading"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteHeading();
-                }}
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          )}
         </div>
 
         {/* Subheading */}
         <div
-          className={`relative mb-8 px-4 py-2 rounded transition-all max-w-2xl ${
-            selectedElement === "subheading" ? "border-2 border-solid border-valasys-orange" :
-            hoveredElement === "subheading" ? "border-2 border-dashed border-valasys-orange" : ""
-          }`}
-          onMouseEnter={() => setHoveredElement("subheading")}
-          onMouseLeave={() => setHoveredElement(null)}
-          onClick={(e) => {
-            e.stopPropagation();
-            setSelectedElement("subheading");
-          }}
+          className={`relative mb-8 px-4 py-2 rounded transition-all max-w-2xl`}
         >
           {isEditingSubheading ? (
             <input
@@ -362,30 +320,6 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
             </p>
           )}
 
-          {selectedElement === "subheading" && !isEditingSubheading && (
-            <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white rounded-lg border border-valasys-orange p-2 z-50 mt-2">
-              <button
-                className="h-8 w-8 p-0 hover:bg-orange-50 hover:text-valasys-orange transition-colors flex items-center justify-center rounded"
-                title="Copy subheading"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleCopySubheading();
-                }}
-              >
-                <Copy className="w-4 h-4" />
-              </button>
-              <button
-                className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600 transition-colors flex items-center justify-center rounded"
-                title="Delete subheading"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteSubheading();
-                }}
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          )}
         </div>
 
         {/* CTA Button */}
