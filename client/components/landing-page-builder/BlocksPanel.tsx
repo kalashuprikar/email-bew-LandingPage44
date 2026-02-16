@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import {
+  Type,
+  Image,
+  Grid2x2,
+  MessageSquare,
+  FileText,
+  Phone,
+  Layers,
   ChevronDown,
   ChevronRight,
-  Grid3x3,
+  Layout,
   Settings,
-  Zap,
-  Share2,
-  Lock,
-  Palette,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   createHeaderBlock,
   createHeroBlock,
@@ -19,389 +23,233 @@ import {
   createContactFormBlock,
   createFooterBlock,
   createSectionSpacerBlock,
+  createPricingBlock,
+  createFaqBlock,
+  createSignupBlock,
+  createPricingFooterBlock,
 } from "./utils";
 import { LandingPageBlock } from "./types";
 
 interface BlocksPanelProps {
   onAddBlock: (block: LandingPageBlock) => void;
-  onSelectBlockVariant?: (variantName: string) => void;
   onOpenSectionsPanel?: () => void;
 }
 
-interface BlockVariant {
+interface BlockOption {
   id: string;
-  name: string;
-  description?: string;
-  preview?: string;
+  icon: React.ReactNode;
+  label: string;
   onCreate: () => LandingPageBlock;
 }
 
-interface BlockItem {
+interface Section {
   id: string;
-  label: string;
-  icon?: React.ReactNode;
-  onCreate: () => LandingPageBlock;
-  variants?: BlockVariant[];
+  title: string;
+  blocks: BlockOption[];
 }
 
-interface SectionGroup {
-  id: string;
-  label: string;
-  items: BlockItem[];
-}
+const DraggableBlockButton: React.FC<{
+  block: BlockOption;
+  onAddBlock: (block: LandingPageBlock) => void;
+}> = ({ block, onAddBlock }) => {
+  return (
+    <button
+      onClick={() => onAddBlock(block.onCreate())}
+      className="flex flex-col items-center justify-center p-4 rounded-lg border border-gray-200 hover:border-valasys-orange hover:bg-orange-50 transition-all hover:shadow-md cursor-pointer"
+    >
+      <div className="mb-2 text-valasys-orange">{block.icon}</div>
+      <span className="text-xs font-medium text-gray-900 text-center">
+        {block.label}
+      </span>
+    </button>
+  );
+};
 
 export const BlocksPanel: React.FC<BlocksPanelProps> = ({
   onAddBlock,
-  onSelectBlockVariant,
   onOpenSectionsPanel,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
-    new Set(["start", "basics", "cms", "elements"]),
+    new Set(["basics", "advanced", "footer"])
   );
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
 
-  const getIconColor = (itemId: string) => {
-    const iconMap: Record<string, string> = {
-      sections: "text-gray-500",
-      navigation: "text-gray-500",
-      menus: "text-gray-500",
-      collections: "text-blue-500",
-      fields: "text-blue-500",
-      icons: "text-blue-500",
-      media: "text-cyan-500",
-      forms: "text-green-500",
-      interactive: "text-orange-500",
-      social: "text-red-500",
-      utility: "text-gray-500",
-      creative: "text-purple-500",
-      wireframer: "text-gray-500",
-    };
-    return iconMap[itemId] || "text-gray-500";
-  };
-
-  const getIcon = (itemId: string) => {
-    const iconSize = "w-5 h-5";
-    const colorClass = getIconColor(itemId);
-
-    const iconMap: Record<string, React.ReactNode> = {
-      sections: <Grid3x3 className={`${iconSize} ${colorClass}`} />,
-      navigation: <Settings className={`${iconSize} ${colorClass}`} />,
-      menus: <Zap className={`${iconSize} ${colorClass}`} />,
-      collections: <Settings className={`${iconSize} ${colorClass}`} />,
-      fields: <Grid3x3 className={`${iconSize} ${colorClass}`} />,
-      icons: <Settings className={`${iconSize} ${colorClass}`} />,
-      media: <Share2 className={`${iconSize} ${colorClass}`} />,
-      forms: <Lock className={`${iconSize} ${colorClass}`} />,
-      interactive: <Zap className={`${iconSize} ${colorClass}`} />,
-      social: <Share2 className={`${iconSize} ${colorClass}`} />,
-      utility: <Settings className={`${iconSize} ${colorClass}`} />,
-      creative: <Palette className={`${iconSize} ${colorClass}`} />,
-      wireframer: <Grid3x3 className={`${iconSize} ${colorClass}`} />,
-    };
-    return iconMap[itemId] || null;
-  };
-
-  const sectionGroups: SectionGroup[] = [
-    {
-      id: "start",
-      label: "Start",
-      items: [
-        {
-          id: "wireframer",
-          label: "Wireframer",
-          onCreate: createHeaderBlock,
-        },
-      ],
-    },
+  const sections: Section[] = [
     {
       id: "basics",
-      label: "Basics",
-      items: [
+      title: "Basic",
+      blocks: [
         {
-          id: "sections",
-          label: "Sections",
-          onCreate: createHeroBlock,
-          variants: [
-            {
-              id: "section-hero",
-              name: "Hero Section",
-              description: "Full width hero with image",
-              onCreate: createHeroBlock,
-            },
-            {
-              id: "section-features",
-              name: "Features",
-              description: "Grid of features",
-              onCreate: createFeaturesBlock,
-            },
-            {
-              id: "section-testimonials",
-              name: "Testimonials",
-              description: "Customer testimonials",
-              onCreate: createTestimonialsBlock,
-            },
-            {
-              id: "section-about",
-              name: "About",
-              description: "About company section",
-              onCreate: createAboutBlock,
-            },
-            {
-              id: "section-contact",
-              name: "Contact",
-              description: "Contact form section",
-              onCreate: createContactFormBlock,
-            },
-            {
-              id: "section-footer",
-              name: "Footer",
-              description: "Footer section",
-              onCreate: createFooterBlock,
-            },
-          ],
-        },
-        {
-          id: "navigation",
-          label: "Navigation",
+          id: "header",
+          icon: <Layout className="w-6 h-6" />,
+          label: "Header",
           onCreate: createHeaderBlock,
-          variants: [
-            {
-              id: "nav-header",
-              name: "Header Nav",
-              description: "Top navigation bar",
-              onCreate: createHeaderBlock,
-            },
-            {
-              id: "nav-sticky",
-              name: "Sticky Nav",
-              description: "Sticky navigation",
-              onCreate: createHeaderBlock,
-            },
-          ],
         },
         {
-          id: "menus",
-          label: "Menus",
-          onCreate: createContactFormBlock,
-          variants: [
-            {
-              id: "menu-horizontal",
-              name: "Horizontal Menu",
-              description: "Horizontal menu layout",
-              onCreate: createContactFormBlock,
-            },
-            {
-              id: "menu-vertical",
-              name: "Vertical Menu",
-              description: "Vertical menu layout",
-              onCreate: createContactFormBlock,
-            },
-          ],
+          id: "hero",
+          icon: <Image className="w-6 h-6" />,
+          label: "Hero",
+          onCreate: createHeroBlock,
         },
-      ],
-    },
-    {
-      id: "cms",
-      label: "CMS",
-      items: [
         {
-          id: "collections",
-          label: "Collections",
+          id: "features",
+          icon: <Grid2x2 className="w-6 h-6" />,
+          label: "Features",
           onCreate: createFeaturesBlock,
-          variants: [
-            {
-              id: "collection-grid",
-              name: "Grid Collection",
-              description: "Grid layout",
-              onCreate: createFeaturesBlock,
-            },
-            {
-              id: "collection-list",
-              name: "List Collection",
-              description: "List layout",
-              onCreate: createFeaturesBlock,
-            },
-          ],
         },
         {
-          id: "fields",
-          label: "Fields",
-          onCreate: createTestimonialsBlock,
-          variants: [
-            {
-              id: "field-text",
-              name: "Text Field",
-              description: "Text input",
-              onCreate: createTestimonialsBlock,
-            },
-            {
-              id: "field-image",
-              name: "Image Field",
-              description: "Image upload",
-              onCreate: createTestimonialsBlock,
-            },
-          ],
+          id: "cta-button",
+          icon: <Type className="w-6 h-6" />,
+          label: "Signup",
+          onCreate: createSignupBlock,
         },
       ],
     },
     {
-      id: "elements",
-      label: "Elements",
-      items: [
+      id: "advanced",
+      title: "Advanced",
+      blocks: [
         {
-          id: "icons",
-          label: "Icons",
+          id: "testimonials",
+          icon: <MessageSquare className="w-6 h-6" />,
+          label: "Testimonials",
+          onCreate: createTestimonialsBlock,
+        },
+        {
+          id: "about",
+          icon: <FileText className="w-6 h-6" />,
+          label: "About",
           onCreate: createAboutBlock,
         },
         {
-          id: "media",
-          label: "Media",
-          onCreate: createFeaturesBlock,
-        },
-        {
-          id: "forms",
-          label: "Forms",
+          id: "contact-form",
+          icon: <Phone className="w-6 h-6" />,
+          label: "Contact Form",
           onCreate: createContactFormBlock,
         },
         {
-          id: "interactive",
-          label: "Interactive",
-          onCreate: createTestimonialsBlock,
+          id: "pricing",
+          icon: <Settings className="w-6 h-6" />,
+          label: "Pricing",
+          onCreate: createPricingBlock,
         },
         {
-          id: "social",
-          label: "Social",
-          onCreate: createSectionSpacerBlock,
+          id: "faq",
+          icon: <MessageSquare className="w-6 h-6" />,
+          label: "FAQ",
+          onCreate: createFaqBlock,
         },
+      ],
+    },
+    {
+      id: "footer",
+      title: "Footer & Utility",
+      blocks: [
         {
-          id: "utility",
-          label: "Utility",
-          onCreate: createHeaderBlock,
-        },
-        {
-          id: "creative",
-          label: "Creative",
+          id: "footer",
+          icon: <Layers className="w-6 h-6" />,
+          label: "Footer",
           onCreate: createFooterBlock,
+        },
+        {
+          id: "pricing-footer",
+          icon: <Settings className="w-6 h-6" />,
+          label: "Pricing Footer",
+          onCreate: createPricingFooterBlock,
+        },
+        {
+          id: "spacer",
+          icon: <Layers className="w-6 h-6" />,
+          label: "Spacer",
+          onCreate: createSectionSpacerBlock,
         },
       ],
     },
   ];
 
-  const toggleSection = (sectionId: string) => {
+  const toggleSection = (id: string) => {
     const newExpanded = new Set(expandedSections);
-    if (newExpanded.has(sectionId)) {
-      newExpanded.delete(sectionId);
+    if (newExpanded.has(id)) {
+      newExpanded.delete(id);
     } else {
-      newExpanded.add(sectionId);
+      newExpanded.add(id);
     }
     setExpandedSections(newExpanded);
   };
 
-  const toggleItem = (itemId: string) => {
-    const newExpanded = new Set(expandedItems);
-    if (newExpanded.has(itemId)) {
-      newExpanded.delete(itemId);
-    } else {
-      newExpanded.add(itemId);
-    }
-    setExpandedItems(newExpanded);
-  };
-
-  const handleItemClick = (item: BlockItem) => {
-    if (item.id === "sections") {
-      onOpenSectionsPanel?.();
-    } else if (item.variants && item.variants.length > 0) {
-      toggleItem(item.id);
-    } else {
-      onAddBlock(item.onCreate());
-    }
-  };
-
-  const handleVariantClick = (variant: BlockVariant) => {
-    onAddBlock(variant.onCreate());
-  };
-
-  const filteredSections = sectionGroups
+  const filteredSections = sections
     .map((section) => ({
       ...section,
-      items: section.items.filter((item) =>
-        item.label.toLowerCase().includes(searchQuery.toLowerCase()),
+      blocks: section.blocks.filter(
+        (block) =>
+          searchQuery === "" ||
+          block.label.toLowerCase().includes(searchQuery.toLowerCase())
       ),
     }))
-    .filter((section) => section.items.length > 0 || searchQuery === "");
+    .filter((section) => section.blocks.length > 0);
 
   return (
-    <div className="flex flex-col bg-white w-full h-full overflow-hidden">
-      <div className="p-3 border-b border-gray-200 bg-white flex-shrink-0">
+    <div className="flex flex-col h-full bg-white">
+      {/* Search */}
+      <div className="p-4 border-b border-gray-200">
         <Input
-          placeholder="Search"
+          placeholder="Search blocks..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="text-sm h-9"
+          className="text-sm"
         />
       </div>
 
+      {/* Sections */}
       <div className="flex-1 overflow-y-auto">
-        <div>
-          {filteredSections.map((section) => (
-            <div key={section.id}>
-              <button
-                onClick={() => toggleSection(section.id)}
-                className="w-full flex items-center justify-between px-4 py-2.5 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors border-b border-gray-100"
-              >
-                <span className="text-gray-600">{section.label}</span>
-              </button>
+        {filteredSections.map((section) => (
+          <div key={section.id} className="border-b border-gray-100 last:border-0">
+            {/* Section Header */}
+            <button
+              onClick={() => toggleSection(section.id)}
+              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors"
+            >
+              <span className="text-sm font-medium text-gray-900">
+                {section.title}
+              </span>
+              {expandedSections.has(section.id) ? (
+                <ChevronDown className="w-4 h-4 text-gray-600" />
+              ) : (
+                <ChevronRight className="w-4 h-4 text-gray-600" />
+              )}
+            </button>
 
-              {expandedSections.has(section.id) && (
-                <div className="bg-white">
-                  {section.items.map((item) => (
-                    <div key={item.id}>
-                      <button
-                        onClick={() => handleItemClick(item)}
-                        className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-valasys-orange transition-colors"
-                      >
-                        <div className="flex items-center gap-3">
-                          {getIcon(item.id)}
-                          <span>{item.label}</span>
-                        </div>
-                        {item.variants && item.variants.length > 0 ? (
-                          expandedItems.has(item.id) ? (
-                            <ChevronDown className="w-4 h-4 text-gray-300" />
-                          ) : (
-                            <ChevronRight className="w-4 h-4 text-gray-300" />
-                          )
-                        ) : (
-                          <ChevronRight className="w-4 h-4 text-gray-300" />
-                        )}
-                      </button>
-
-                      {item.variants && expandedItems.has(item.id) && (
-                        <div className="bg-gray-50 border-t border-gray-100">
-                          {item.variants.map((variant) => (
-                            <button
-                              key={variant.id}
-                              onClick={() => handleVariantClick(variant)}
-                              className="w-full text-left px-8 py-2.5 text-sm text-gray-600 hover:bg-white hover:text-valasys-orange transition-colors border-b border-gray-100 last:border-b-0"
-                            >
-                              <div className="font-medium">{variant.name}</div>
-                              {variant.description && (
-                                <div className="text-gray-400 text-xs mt-0.5">
-                                  {variant.description}
-                                </div>
-                              )}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+            {/* Section Content */}
+            {expandedSections.has(section.id) && (
+              <div className="px-3 py-2 pb-4 bg-gray-50">
+                <div className="grid grid-cols-2 gap-2">
+                  {section.blocks.map((block) => (
+                    <DraggableBlockButton
+                      key={block.id}
+                      block={block}
+                      onAddBlock={onAddBlock}
+                    />
                   ))}
                 </div>
-              )}
-            </div>
-          ))}
-        </div>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
+
+      {/* Templates Button */}
+      {onOpenSectionsPanel && (
+        <div className="border-t border-gray-200 p-4">
+          <Button
+            onClick={onOpenSectionsPanel}
+            variant="outline"
+            className="w-full"
+            size="sm"
+          >
+            View Templates
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

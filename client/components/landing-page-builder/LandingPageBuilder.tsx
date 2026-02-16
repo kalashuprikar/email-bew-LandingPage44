@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ChevronLeft, Save } from "lucide-react";
+import { ChevronLeft, Save, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import DashboardLayout from "@/components/layout/DashboardLayout";
@@ -15,9 +15,11 @@ import {
   createContactFormBlock,
   createFooterBlock,
 } from "./utils";
-import { LandingPagePreview } from "./LandingPagePreview";
+import { DraggableLandingPagePreview } from "./DraggableLandingPagePreview";
 import { BlocksPanel } from "./BlocksPanel";
 import { SectionsPanel } from "./SectionsPanel";
+import { LandingPageSettingsPanel } from "./LandingPageSettingsPanel";
+import { LandingPagePreviewMode } from "./LandingPagePreviewMode";
 
 interface LandingPageBuilderProps {
   pageId?: string;
@@ -31,8 +33,11 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
   const [page, setPage] = useState<LandingPage | null>(null);
   const [pageName, setPageName] = useState("");
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
+  const [selectedLinkIndex, setSelectedLinkIndex] = useState<number | null>(null);
+  const [selectedLinkType, setSelectedLinkType] = useState<"navigation" | "quick" | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isSectionsPanelOpen, setIsSectionsPanelOpen] = useState(false);
+  const [previewMode, setPreviewMode] = useState(false);
 
   useEffect(() => {
     if (pageId) {
@@ -138,6 +143,27 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
     });
   };
 
+  const handleReorderBlocks = (reorderedBlocks: LandingPageBlock[]) => {
+    if (!page) return;
+
+    setPage({
+      ...page,
+      blocks: reorderedBlocks,
+    });
+  };
+
+  const handleAddBlockAtIndex = (blockIndex: number, block: LandingPageBlock) => {
+    if (!page) return;
+
+    const newBlocks = [...page.blocks];
+    newBlocks.splice(blockIndex, 0, block);
+
+    setPage({
+      ...page,
+      blocks: newBlocks,
+    });
+  };
+
   const handleSelectTemplate = (blocks: LandingPageBlock[]) => {
     if (!page) return;
 
@@ -183,6 +209,16 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
   const selectedBlock =
     page.blocks.find((b) => b.id === selectedBlockId) || null;
 
+  // If in preview mode, show the preview component
+  if (previewMode) {
+    return (
+      <LandingPagePreviewMode
+        page={page}
+        onBack={() => setPreviewMode(false)}
+      />
+    );
+  }
+
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Left Sidebar - Blocks Panel */}
@@ -192,7 +228,13 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
             variant="ghost"
             size="sm"
             className="w-full justify-start text-gray-600 hover:text-gray-900"
-            onClick={onBack}
+            onClick={() => {
+              if (previewMode) {
+                setPreviewMode(false);
+              } else {
+                onBack();
+              }
+            }}
           >
             <ChevronLeft className="w-4 h-4 mr-2" />
             Back
@@ -204,7 +246,7 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
         />
       </div>
 
-      {/* Right Sidebar - Sections Panel (conditional) */}
+      {/* Middle - Sections Panel (conditional) */}
       {isSectionsPanelOpen && (
         <div className="w-80 bg-white border-r border-gray-200 overflow-hidden flex flex-col">
           <SectionsPanel
@@ -214,7 +256,7 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
         </div>
       )}
 
-      {/* Main Editor Area */}
+      {/* Center - Main Editor Area */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
         <div className="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
@@ -226,20 +268,31 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
               className="text-lg font-semibold border-0 focus-visible:ring-0 px-0"
             />
           </div>
-          <Button
-            onClick={handleSave}
-            disabled={isSaving}
-            className="bg-valasys-orange hover:bg-orange-600"
-          >
-            <Save className="w-4 h-4 mr-2" />
-            {isSaving ? "Saving..." : "Save"}
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant={previewMode ? "default" : "outline"}
+              size="sm"
+              onClick={() => setPreviewMode(!previewMode)}
+              className={previewMode ? "bg-valasys-orange text-white" : ""}
+            >
+              <Eye className="w-4 h-4 mr-2" />
+              Preview
+            </Button>
+            <Button
+              onClick={handleSave}
+              disabled={isSaving}
+              className="bg-valasys-orange hover:bg-orange-600"
+            >
+              <Save className="w-4 h-4 mr-2" />
+              {isSaving ? "Saving..." : "Save"}
+            </Button>
+          </div>
         </div>
 
         {/* Preview Area */}
         <div className="flex-1 overflow-y-auto bg-gray-50 p-8">
           <div className="max-w-4xl mx-auto">
-            <LandingPagePreview
+            <DraggableLandingPagePreview
               page={page}
               selectedBlockId={selectedBlockId}
               onSelectBlock={setSelectedBlockId}
@@ -247,9 +300,34 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
               onDeleteBlock={handleDeleteBlock}
               onMoveBlock={handleMoveBlock}
               onDuplicateBlock={handleDuplicateBlock}
+              onReorderBlocks={handleReorderBlocks}
+              onAddBlock={handleAddBlockAtIndex}
+              onLinkSelect={(blockId, linkIndex, linkType) => {
+                setSelectedBlockId(blockId);
+                setSelectedLinkIndex(linkIndex);
+                setSelectedLinkType(linkType);
+              }}
             />
           </div>
         </div>
+      </div>
+
+      {/* Right Sidebar - Settings Panel */}
+      <div className="w-96 bg-white border-l border-gray-200 overflow-hidden flex flex-col">
+        <LandingPageSettingsPanel
+          block={selectedBlock}
+          blockId={selectedBlockId || undefined}
+          onBlockUpdate={handleUpdateBlock}
+          onBlockDelete={
+            selectedBlockId ? () => handleDeleteBlock(selectedBlockId) : undefined
+          }
+          selectedLinkIndex={selectedLinkIndex}
+          selectedLinkType={selectedLinkType}
+          onLinkSelect={(index, type) => {
+            setSelectedLinkIndex(index);
+            setSelectedLinkType(type);
+          }}
+        />
       </div>
     </div>
   );
