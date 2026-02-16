@@ -148,9 +148,15 @@ export const LandingPagePreviewMode: React.FC<LandingPagePreviewModeProps> = ({
       <div className="flex-1 overflow-y-auto bg-gray-900 flex items-start justify-center p-4 md:p-8">
         <style>{`
           .preview-desktop-only {
-            display: block !important;
+            display: flex !important;
           }
           .preview-mobile-only {
+            display: none !important;
+          }
+          [data-preview-device="tablet"] .preview-desktop-only {
+            display: flex !important;
+          }
+          [data-preview-device="tablet"] .preview-mobile-only {
             display: none !important;
           }
           [data-preview-device="mobile"] .preview-desktop-only {
