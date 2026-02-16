@@ -311,6 +311,7 @@ export const DraggableLandingPagePreview: React.FC<
   onMoveBlock,
   onDuplicateBlock,
   onReorderBlocks,
+  onAddBlock,
 }) => {
   const [blocks, setBlocks] = React.useState(page.blocks);
 
