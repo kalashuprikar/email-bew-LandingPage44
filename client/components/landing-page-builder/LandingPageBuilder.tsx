@@ -74,15 +74,32 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
     });
   };
 
+  const updateBlockInTree = (
+    blocks: LandingPageBlock[],
+    blockId: string,
+    properties: Record<string, any>,
+  ): LandingPageBlock[] => {
+    return blocks.map((block) => {
+      if (block.id === blockId) {
+        return { ...block, properties };
+      }
+      if (block.children) {
+        return {
+          ...block,
+          children: updateBlockInTree(block.children, blockId, properties),
+        };
+      }
+      return block;
+    });
+  };
+
   const handleUpdateBlock = (
     blockId: string,
     properties: Record<string, any>,
   ) => {
     if (!page) return;
 
-    const updatedBlocks = page.blocks.map((block) =>
-      block.id === blockId ? { ...block, properties } : block,
-    );
+    const updatedBlocks = updateBlockInTree(page.blocks, blockId, properties);
 
     setPage({
       ...page,
@@ -90,12 +107,31 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
     });
   };
 
+  const deleteBlockFromTree = (
+    blocks: LandingPageBlock[],
+    blockId: string,
+  ): LandingPageBlock[] => {
+    return blocks
+      .filter((block) => block.id !== blockId)
+      .map((block) => {
+        if (block.children) {
+          return {
+            ...block,
+            children: deleteBlockFromTree(block.children, blockId),
+          };
+        }
+        return block;
+      });
+  };
+
   const handleDeleteBlock = (blockId: string) => {
     if (!page) return;
 
+    const updatedBlocks = deleteBlockFromTree(page.blocks, blockId);
+
     setPage({
       ...page,
-      blocks: page.blocks.filter((block) => block.id !== blockId),
+      blocks: updatedBlocks,
     });
 
     setSelectedBlockId(null);
@@ -106,6 +142,8 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
     if (!page) return;
 
     const index = page.blocks.findIndex((b) => b.id === blockId);
+    if (index === -1) return;
+
     if (
       (direction === "up" && index === 0) ||
       (direction === "down" && index === page.blocks.length - 1)
@@ -126,24 +164,34 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
     });
   };
 
+  const duplicateBlockInTree = (
+    blocks: LandingPageBlock[],
+    blockId: string,
+  ): LandingPageBlock[] => {
+    const newBlocks: LandingPageBlock[] = [];
+    for (const block of blocks) {
+      newBlocks.push(block);
+      if (block.id === blockId) {
+        const duplicatedBlock: LandingPageBlock = JSON.parse(
+          JSON.stringify(block),
+        );
+        duplicatedBlock.id = `${block.type}-${Date.now()}`;
+        newBlocks.push(duplicatedBlock);
+      } else if (block.children) {
+        block.children = duplicateBlockInTree(block.children, blockId);
+      }
+    }
+    return newBlocks;
+  };
+
   const handleDuplicateBlock = (blockId: string) => {
     if (!page) return;
 
-    const blockToClone = page.blocks.find((b) => b.id === blockId);
-    if (!blockToClone) return;
-
-    const duplicatedBlock: LandingPageBlock = {
-      ...JSON.parse(JSON.stringify(blockToClone)),
-      id: `block-${Date.now()}`,
-    };
-
-    const blockIndex = page.blocks.findIndex((b) => b.id === blockId);
-    const newBlocks = [...page.blocks];
-    newBlocks.splice(blockIndex + 1, 0, duplicatedBlock);
+    const updatedBlocks = duplicateBlockInTree([...page.blocks], blockId);
 
     setPage({
       ...page,
-      blocks: newBlocks,
+      blocks: updatedBlocks,
     });
   };
 
@@ -156,11 +204,24 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
     });
   };
 
-  const handleAddBlockAtIndex = (blockIndex: number, block: LandingPageBlock) => {
+  const handleAddBlockAtIndex = (
+    blockIndex: number,
+    block: LandingPageBlock,
+    parentId?: string,
+  ) => {
     if (!page) return;
 
-    const newBlocks = [...page.blocks];
-    newBlocks.splice(blockIndex, 0, block);
+    let newBlocks: LandingPageBlock[] = JSON.parse(JSON.stringify(page.blocks));
+
+    if (parentId) {
+      const parent = findBlockInTree(newBlocks, parentId);
+      if (parent) {
+        if (!parent.children) parent.children = [];
+        parent.children.splice(blockIndex, 0, block);
+      }
+    } else {
+      newBlocks.splice(blockIndex, 0, block);
+    }
 
     setPage({
       ...page,
@@ -210,8 +271,21 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
     );
   }
 
-  const selectedBlock =
-    page.blocks.find((b) => b.id === selectedBlockId) || null;
+  const findBlockInTree = (
+    blocks: LandingPageBlock[],
+    blockId: string,
+  ): LandingPageBlock | null => {
+    for (const block of blocks) {
+      if (block.id === blockId) return block;
+      if (block.children) {
+        const found = findBlockInTree(block.children, blockId);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+
+  const selectedBlock = selectedBlockId ? findBlockInTree(page.blocks, selectedBlockId) : null;
 
   // If in preview mode, show the preview component
   if (previewMode) {

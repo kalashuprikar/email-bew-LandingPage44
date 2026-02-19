@@ -963,6 +963,431 @@ export const LandingPageSettingsPanel: React.FC<
     </div>
   );
 
+  const renderHeadingBlockSettings = () => (
+    <div className="space-y-4">
+      <div>
+        <Label className="text-sm font-medium">Text</Label>
+        <textarea
+          value={localProps.text || ""}
+          onChange={(e) => updateProperty("text", e.target.value)}
+          placeholder="Heading text"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
+          rows={3}
+        />
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium">Heading Level</Label>
+        <select
+          value={localProps.level || "h2"}
+          onChange={(e) => updateProperty("level", e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-sm"
+        >
+          <option value="h1">Heading 1 (H1)</option>
+          <option value="h2">Heading 2 (H2)</option>
+          <option value="h3">Heading 3 (H3)</option>
+        </select>
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium">Font Family</Label>
+        <select
+          value={localProps.fontFamily || "Arial, sans-serif"}
+          onChange={(e) => updateProperty("fontFamily", e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-sm"
+        >
+          <option value="Arial, sans-serif">Arial</option>
+          <option value="Georgia, serif">Georgia</option>
+          <option value="Times New Roman, serif">Times New Roman</option>
+          <option value="Courier New, monospace">Courier New</option>
+          <option value="Verdana, sans-serif">Verdana</option>
+          <option value="Inter, sans-serif">Inter</option>
+        </select>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label className="text-sm font-medium">Font Size</Label>
+          <Input
+            value={localProps.fontSize || "2rem"}
+            onChange={(e) => updateProperty("fontSize", e.target.value)}
+            placeholder="2rem or 32px"
+          />
+        </div>
+        <div>
+          <Label className="text-sm font-medium">Font Weight</Label>
+          <select
+            value={localProps.fontWeight || "bold"}
+            onChange={(e) => updateProperty("fontWeight", e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-sm"
+          >
+            <option value="normal">Normal</option>
+            <option value="medium">Medium</option>
+            <option value="semibold">Semibold</option>
+            <option value="bold">Bold</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium">Text Color</Label>
+        <div className="flex gap-2">
+          <Input
+            type="color"
+            value={localProps.textColor || "#1f2937"}
+            onChange={(e) => updateProperty("textColor", e.target.value)}
+            className="w-12 h-10 p-1 cursor-pointer"
+          />
+          <Input
+            value={localProps.textColor || "#1f2937"}
+            onChange={(e) => updateProperty("textColor", e.target.value)}
+            placeholder="#1f2937"
+            className="flex-1"
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium">Text Alignment</Label>
+        <div className="flex gap-2">
+          {["left", "center", "right"].map((align) => (
+            <button
+              key={align}
+              onClick={() => updateProperty("textAlign", align)}
+              className={`flex-1 py-2 px-3 rounded border text-xs font-medium transition-colors ${
+                (localProps.textAlign || "left") === align
+                  ? "bg-valasys-orange text-white border-valasys-orange"
+                  : "border-gray-300 hover:border-gray-400"
+              }`}
+            >
+              {align.charAt(0).toUpperCase() + align.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label className="text-sm font-medium">Padding</Label>
+          <Input
+            value={localProps.padding || "20px"}
+            onChange={(e) => updateProperty("padding", e.target.value)}
+            placeholder="20px"
+          />
+        </div>
+        <div>
+          <Label className="text-sm font-medium">Margin</Label>
+          <Input
+            value={localProps.margin || "0px"}
+            onChange={(e) => updateProperty("margin", e.target.value)}
+            placeholder="0px"
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium">Background Color</Label>
+        <div className="flex gap-2">
+          <Input
+            type="color"
+            value={localProps.backgroundColor || "#ffffff"}
+            onChange={(e) => updateProperty("backgroundColor", e.target.value)}
+            className="w-12 h-10 p-1 cursor-pointer"
+          />
+          <Input
+            value={localProps.backgroundColor || "#ffffff"}
+            onChange={(e) => updateProperty("backgroundColor", e.target.value)}
+            placeholder="#ffffff"
+            className="flex-1"
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium">Custom CSS Classes</Label>
+        <Input
+          value={localProps.customClasses || ""}
+          onChange={(e) => updateProperty("customClasses", e.target.value)}
+          placeholder="mt-4 shadow-sm"
+        />
+      </div>
+    </div>
+  );
+
+  const renderParagraphBlockSettings = () => (
+    <div className="space-y-4">
+      <div>
+        <Label className="text-sm font-medium">Text</Label>
+        <textarea
+          value={localProps.text || ""}
+          onChange={(e) => updateProperty("text", e.target.value)}
+          placeholder="Paragraph text"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
+          rows={5}
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label className="text-sm font-medium">Font Size</Label>
+          <Input
+            value={localProps.fontSize || "1rem"}
+            onChange={(e) => updateProperty("fontSize", e.target.value)}
+            placeholder="1rem or 16px"
+          />
+        </div>
+        <div>
+          <Label className="text-sm font-medium">Line Height</Label>
+          <Input
+            value={localProps.lineHeight || "1.6"}
+            onChange={(e) => updateProperty("lineHeight", e.target.value)}
+            placeholder="1.6"
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium">Text Color</Label>
+        <div className="flex gap-2">
+          <Input
+            type="color"
+            value={localProps.textColor || "#4b5563"}
+            onChange={(e) => updateProperty("textColor", e.target.value)}
+            className="w-12 h-10 p-1 cursor-pointer"
+          />
+          <Input
+            value={localProps.textColor || "#4b5563"}
+            onChange={(e) => updateProperty("textColor", e.target.value)}
+            placeholder="#4b5563"
+            className="flex-1"
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium">Text Alignment</Label>
+        <div className="flex gap-2">
+          {["left", "center", "right"].map((align) => (
+            <button
+              key={align}
+              onClick={() => updateProperty("textAlign", align)}
+              className={`flex-1 py-2 px-3 rounded border text-xs font-medium transition-colors ${
+                (localProps.textAlign || "left") === align
+                  ? "bg-valasys-orange text-white border-valasys-orange"
+                  : "border-gray-300 hover:border-gray-400"
+              }`}
+            >
+              {align.charAt(0).toUpperCase() + align.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label className="text-sm font-medium">Padding</Label>
+          <Input
+            value={localProps.padding || "20px"}
+            onChange={(e) => updateProperty("padding", e.target.value)}
+            placeholder="20px"
+          />
+        </div>
+        <div>
+          <Label className="text-sm font-medium">Margin</Label>
+          <Input
+            value={localProps.margin || "0px"}
+            onChange={(e) => updateProperty("margin", e.target.value)}
+            placeholder="0px"
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium">Background Color</Label>
+        <div className="flex gap-2">
+          <Input
+            type="color"
+            value={localProps.backgroundColor || "#ffffff"}
+            onChange={(e) => updateProperty("backgroundColor", e.target.value)}
+            className="w-12 h-10 p-1 cursor-pointer"
+          />
+          <Input
+            value={localProps.backgroundColor || "#ffffff"}
+            onChange={(e) => updateProperty("backgroundColor", e.target.value)}
+            placeholder="#ffffff"
+            className="flex-1"
+          />
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderRichTextBlockSettings = () => (
+    <div className="space-y-4">
+      <div>
+        <Label className="text-sm font-medium">HTML Content</Label>
+        <p className="text-xs text-gray-500 mb-2">Supports basic HTML: strong, em, u, a, ul, li</p>
+        <textarea
+          value={localProps.text || ""}
+          onChange={(e) => updateProperty("text", e.target.value)}
+          placeholder="Rich text content (HTML)"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 font-mono text-xs"
+          rows={8}
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label className="text-sm font-medium">Font Size</Label>
+          <Input
+            value={localProps.fontSize || "1rem"}
+            onChange={(e) => updateProperty("fontSize", e.target.value)}
+            placeholder="1rem or 16px"
+          />
+        </div>
+        <div>
+          <Label className="text-sm font-medium">Line Height</Label>
+          <Input
+            value={localProps.lineHeight || "1.6"}
+            onChange={(e) => updateProperty("lineHeight", e.target.value)}
+            placeholder="1.6"
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium">Text Color</Label>
+        <div className="flex gap-2">
+          <Input
+            type="color"
+            value={localProps.textColor || "#4b5563"}
+            onChange={(e) => updateProperty("textColor", e.target.value)}
+            className="w-12 h-10 p-1 cursor-pointer"
+          />
+          <Input
+            value={localProps.textColor || "#4b5563"}
+            onChange={(e) => updateProperty("textColor", e.target.value)}
+            placeholder="#4b5563"
+            className="flex-1"
+          />
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderQuoteBlockSettings = () => (
+    <div className="space-y-4">
+      <div>
+        <Label className="text-sm font-medium">Quote Text</Label>
+        <textarea
+          value={localProps.quoteText || ""}
+          onChange={(e) => updateProperty("quoteText", e.target.value)}
+          placeholder="Quote text"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
+          rows={3}
+        />
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium">Author Name</Label>
+        <Input
+          value={localProps.authorName || ""}
+          onChange={(e) => updateProperty("authorName", e.target.value)}
+          placeholder="Author name"
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label className="text-sm font-medium">Quote Size</Label>
+          <Input
+            value={localProps.quoteSize || "1.5rem"}
+            onChange={(e) => updateProperty("quoteSize", e.target.value)}
+            placeholder="1.5rem"
+          />
+        </div>
+        <div>
+          <Label className="text-sm font-medium">Author Size</Label>
+          <Input
+            value={localProps.authorSize || "0.875rem"}
+            onChange={(e) => updateProperty("authorSize", e.target.value)}
+            placeholder="0.875rem"
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium">Text Color</Label>
+        <div className="flex gap-2">
+          <Input
+            type="color"
+            value={localProps.textColor || "#1f2937"}
+            onChange={(e) => updateProperty("textColor", e.target.value)}
+            className="w-12 h-10 p-1 cursor-pointer"
+          />
+          <Input
+            value={localProps.textColor || "#1f2937"}
+            onChange={(e) => updateProperty("textColor", e.target.value)}
+            placeholder="#1f2937"
+            className="flex-1"
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium">Border Position</Label>
+        <select
+          value={localProps.borderPosition || "left"}
+          onChange={(e) => updateProperty("borderPosition", e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-sm"
+        >
+          <option value="left">Left</option>
+          <option value="top">Top</option>
+          <option value="right">Right</option>
+          <option value="bottom">Bottom</option>
+        </select>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label className="text-sm font-medium">Border Width</Label>
+          <Input
+            value={localProps.borderWidth || "4px"}
+            onChange={(e) => updateProperty("borderWidth", e.target.value)}
+            placeholder="4px"
+          />
+        </div>
+        <div>
+          <Label className="text-sm font-medium">Border Color</Label>
+          <Input
+            type="color"
+            value={localProps.borderColor || "#FF6A00"}
+            onChange={(e) => updateProperty("borderColor", e.target.value)}
+            className="w-full h-10 p-1 cursor-pointer"
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium">Background Color</Label>
+        <div className="flex gap-2">
+          <Input
+            type="color"
+            value={localProps.backgroundColor || "#f3f4f6"}
+            onChange={(e) => updateProperty("backgroundColor", e.target.value)}
+            className="w-12 h-10 p-1 cursor-pointer"
+          />
+          <Input
+            value={localProps.backgroundColor || "#f3f4f6"}
+            onChange={(e) => updateProperty("backgroundColor", e.target.value)}
+            placeholder="#f3f4f6"
+            className="flex-1"
+          />
+        </div>
+      </div>
+    </div>
+  );
+
   const renderDefaultSettings = () => (
     <div className="space-y-4">
       <div>
@@ -997,7 +1422,7 @@ export const LandingPageSettingsPanel: React.FC<
   const renderTextHeadingsBlockSettings = () => (
     <div className="space-y-6">
       <div className="border-b border-gray-200 pb-4">
-        <h4 className="font-semibold text-gray-900 mb-4">Container Styling</h4>
+        <h4 className="font-semibold text-gray-900 mb-4">Component Styling</h4>
 
         <div className="space-y-4">
           <div>
@@ -1005,13 +1430,13 @@ export const LandingPageSettingsPanel: React.FC<
             <div className="flex gap-2">
               <Input
                 type="color"
-                value={localProps.containerBackgroundColor || "#ffffff"}
-                onChange={(e) => updateProperty("containerBackgroundColor", e.target.value)}
+                value={localProps.backgroundColor || "#ffffff"}
+                onChange={(e) => updateProperty("backgroundColor", e.target.value)}
                 className="w-12 h-10 p-1 cursor-pointer"
               />
               <Input
-                value={localProps.containerBackgroundColor || "#ffffff"}
-                onChange={(e) => updateProperty("containerBackgroundColor", e.target.value)}
+                value={localProps.backgroundColor || "#ffffff"}
+                onChange={(e) => updateProperty("backgroundColor", e.target.value)}
                 placeholder="#ffffff"
                 className="flex-1"
               />
@@ -1019,153 +1444,67 @@ export const LandingPageSettingsPanel: React.FC<
           </div>
 
           <div>
-            <Label className="text-sm font-medium">Padding (px)</Label>
+            <Label className="text-sm font-medium">Background Image URL</Label>
             <Input
-              value={localProps.containerPadding || "24px"}
-              onChange={(e) => updateProperty("containerPadding", e.target.value)}
-              placeholder="24px"
+              value={localProps.backgroundImage || ""}
+              onChange={(e) => updateProperty("backgroundImage", e.target.value)}
+              placeholder="https://example.com/image.jpg"
             />
           </div>
 
-          <div>
-            <Label className="text-sm font-medium">Margin (px)</Label>
-            <Input
-              value={localProps.containerMargin || "0px"}
-              onChange={(e) => updateProperty("containerMargin", e.target.value)}
-              placeholder="0px"
-            />
-          </div>
-
-          <div>
-            <Label className="text-sm font-medium">Border Radius (px)</Label>
-            <Input
-              value={localProps.containerBorderRadius || "0px"}
-              onChange={(e) => updateProperty("containerBorderRadius", e.target.value)}
-              placeholder="0px"
-            />
-          </div>
-
-          <div>
-            <Label className="text-sm font-medium">Box Shadow</Label>
-            <Input
-              value={localProps.containerBoxShadow || "none"}
-              onChange={(e) => updateProperty("containerBoxShadow", e.target.value)}
-              placeholder="none or shadow CSS"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="border-b border-gray-200 pb-4">
-        <h4 className="font-semibold text-gray-900 mb-4">Edit Elements</h4>
-        <p className="text-xs text-gray-600 mb-3">Click on text elements in the preview to edit them individually. Use the styling controls below to customize all elements at once.</p>
-
-        {localProps.elements && localProps.elements.length > 0 ? (
-          <div className="space-y-2">
-            {localProps.elements.map((element: any) => (
-              <div key={element.id} className="p-3 bg-gray-50 rounded border border-gray-200">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <p className="text-xs font-medium text-gray-700 mb-1">
-                      {element.type === "heading" ? `Heading (${element.level})` : element.type.charAt(0).toUpperCase() + element.type.slice(1)}
-                    </p>
-                    <p className="text-xs text-gray-600 truncate">{element.text}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-xs text-gray-500 italic">No elements added yet. Click the block to add elements.</p>
-        )}
-      </div>
-
-      <div>
-        <h4 className="font-semibold text-gray-900 mb-4">Text Styling (All Elements)</h4>
-        <p className="text-xs text-gray-600 mb-4">Apply these styles to all text elements in the block:</p>
-
-        <div className="space-y-4">
-          <div>
-            <Label className="text-sm font-medium">Font Family</Label>
-            <select
-              value={localProps.defaultFontFamily || "Arial, sans-serif"}
-              onChange={(e) => {
-                updateProperty("defaultFontFamily", e.target.value);
-                // Update all elements
-                const updatedElements = localProps.elements?.map((el: any) => ({
-                  ...el,
-                  fontFamily: e.target.value,
-                })) || [];
-                updateProperty("elements", updatedElements);
-              }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-            >
-              <option value="Arial, sans-serif">Arial</option>
-              <option value="Georgia, serif">Georgia</option>
-              <option value="Times New Roman, serif">Times New Roman</option>
-              <option value="Courier New, monospace">Courier New</option>
-              <option value="Verdana, sans-serif">Verdana</option>
-              <option value="Trebuchet MS, sans-serif">Trebuchet MS</option>
-            </select>
-          </div>
-
-          <div>
-            <Label className="text-sm font-medium">Text Color</Label>
-            <div className="flex gap-2">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label className="text-sm font-medium">Padding</Label>
               <Input
-                type="color"
-                value={localProps.defaultTextColor || "#1f2937"}
-                onChange={(e) => {
-                  updateProperty("defaultTextColor", e.target.value);
-                  const updatedElements = localProps.elements?.map((el: any) => ({
-                    ...el,
-                    textColor: e.target.value,
-                  })) || [];
-                  updateProperty("elements", updatedElements);
-                }}
-                className="w-12 h-10 p-1 cursor-pointer"
+                value={localProps.padding || "40px"}
+                onChange={(e) => updateProperty("padding", e.target.value)}
+                placeholder="40px"
               />
+            </div>
+            <div>
+              <Label className="text-sm font-medium">Margin</Label>
               <Input
-                value={localProps.defaultTextColor || "#1f2937"}
-                onChange={(e) => {
-                  updateProperty("defaultTextColor", e.target.value);
-                  const updatedElements = localProps.elements?.map((el: any) => ({
-                    ...el,
-                    textColor: e.target.value,
-                  })) || [];
-                  updateProperty("elements", updatedElements);
-                }}
-                placeholder="#1f2937"
-                className="flex-1"
+                value={localProps.margin || "0px"}
+                onChange={(e) => updateProperty("margin", e.target.value)}
+                placeholder="0px"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label className="text-sm font-medium">Border Radius</Label>
+              <Input
+                value={localProps.borderRadius || "0px"}
+                onChange={(e) => updateProperty("borderRadius", e.target.value)}
+                placeholder="0px"
+              />
+            </div>
+            <div>
+              <Label className="text-sm font-medium">Box Shadow</Label>
+              <Input
+                value={localProps.boxShadow || "none"}
+                onChange={(e) => updateProperty("boxShadow", e.target.value)}
+                placeholder="none"
               />
             </div>
           </div>
 
           <div>
-            <Label className="text-sm font-medium">Text Alignment</Label>
-            <div className="flex gap-2">
-              {["left", "center", "right"].map((align) => (
-                <button
-                  key={align}
-                  onClick={() => {
-                    const updatedElements = localProps.elements?.map((el: any) => ({
-                      ...el,
-                      textAlign: align,
-                    })) || [];
-                    updateProperty("elements", updatedElements);
-                  }}
-                  className={`flex-1 py-2 px-3 rounded border text-xs font-medium transition-colors ${
-                    localProps.elements?.[0]?.textAlign === align
-                      ? "bg-valasys-orange text-white border-valasys-orange"
-                      : "border-gray-300 hover:border-gray-400"
-                  }`}
-                >
-                  {align.charAt(0).toUpperCase() + align.slice(1)}
-                </button>
-              ))}
-            </div>
+            <Label className="text-sm font-medium">Custom CSS Classes</Label>
+            <Input
+              value={localProps.customClasses || ""}
+              onChange={(e) => updateProperty("customClasses", e.target.value)}
+              placeholder="my-custom-class"
+            />
           </div>
         </div>
+      </div>
+
+      <div className="bg-orange-50 p-4 rounded-md border border-orange-200">
+        <p className="text-xs text-orange-800">
+          <strong>Tip:</strong> Click on the individual text blocks inside the "Text & Headings" component to edit their specific styles like font family, size, and weight.
+        </p>
       </div>
     </div>
   );
@@ -1184,7 +1523,15 @@ export const LandingPageSettingsPanel: React.FC<
         return renderAboutBlockSettings();
       case "footer":
         return renderFooterBlockSettings();
-      case "text-headings-composite":
+      case "heading":
+        return renderHeadingBlockSettings();
+      case "paragraph":
+        return renderParagraphBlockSettings();
+      case "rich-text":
+        return renderRichTextBlockSettings();
+      case "quote":
+        return renderQuoteBlockSettings();
+      case "text-headings":
         return renderTextHeadingsBlockSettings();
       default:
         return renderDefaultSettings();

@@ -26,6 +26,7 @@ import {
   ParagraphBlockPreview,
   RichTextBlockPreview,
   QuoteBlockPreview,
+  TextHeadingsBlockPreview,
 } from "./BlockPreviews";
 import {
   createHeaderBlock,
@@ -44,6 +45,7 @@ import {
   createParagraphBlock,
   createRichTextBlock,
   createQuoteBlock,
+  createTextHeadingsBlock,
 } from "./utils";
 
 interface DraggableLandingPagePreviewProps {
@@ -57,7 +59,7 @@ interface DraggableLandingPagePreviewProps {
   onMoveBlock: (blockId: string, direction: "up" | "down") => void;
   onDuplicateBlock?: (blockId: string) => void;
   onReorderBlocks: (blocks: LandingPageBlock[]) => void;
-  onAddBlock?: (blockIndex: number, block: LandingPageBlock) => void;
+  onAddBlock?: (blockIndex: number, block: LandingPageBlock, parentId?: string) => void;
   onLinkSelect?: (blockId: string, linkIndex: number, linkType: "navigation" | "quick") => void;
 }
 
@@ -78,11 +80,13 @@ const BLOCK_CREATORS = {
   paragraph: createParagraphBlock,
   "rich-text": createRichTextBlock,
   quote: createQuoteBlock,
+  "text-headings": createTextHeadingsBlock,
 };
 
 const DragItem: React.FC<{
   block: LandingPageBlock;
   index: number;
+  parentId?: string;
   isSelected: boolean;
   selectedElement?: "heading" | "subheading" | "button" | null;
   onSelect: () => void;
@@ -92,10 +96,12 @@ const DragItem: React.FC<{
   onDuplicate?: () => void;
   onAddBlock?: (blockIndex: number, block: LandingPageBlock) => void;
   onLinkSelect?: (linkIndex: number, linkType: "navigation" | "quick") => void;
-  moveBlock: (dragIndex: number, hoverIndex: number) => void;
+  moveBlock: (dragIndex: number, hoverIndex: number, dragParentId?: string, hoverParentId?: string) => void;
+  renderBlock?: (block: LandingPageBlock, index: number, parentId?: string) => React.ReactNode;
 }> = ({
   block,
   index,
+  parentId,
   isSelected,
   selectedElement,
   onSelect,
@@ -106,6 +112,7 @@ const DragItem: React.FC<{
   onAddBlock,
   onLinkSelect,
   moveBlock,
+  renderBlock,
 }) => {
   const ref = React.useRef<HTMLDivElement>(null);
 
@@ -123,11 +130,14 @@ const DragItem: React.FC<{
       if (item.index !== undefined) {
         const dragIndex = item.index;
         const hoverIndex = index;
+        const dragParentId = item.parentId;
+        const hoverParentId = parentId;
 
-        if (dragIndex === hoverIndex) return;
+        if (dragIndex === hoverIndex && dragParentId === hoverParentId) return;
 
-        moveBlock(dragIndex, hoverIndex);
+        moveBlock(dragIndex, hoverIndex, dragParentId, hoverParentId);
         item.index = hoverIndex;
+        item.parentId = hoverParentId;
       }
     },
     drop(item: any) {
@@ -143,6 +153,7 @@ const DragItem: React.FC<{
     item: () => ({
       index,
       id: block.id,
+      parentId,
     }),
     collect(monitor) {
       return {
@@ -213,6 +224,9 @@ const DragItem: React.FC<{
       break;
     case "quote":
       blockContent = <QuoteBlockPreview {...blockProps} />;
+      break;
+    case "text-headings":
+      blockContent = <TextHeadingsBlockPreview {...blockProps} renderBlock={renderBlock} />;
       break;
     default:
       blockContent = <div>Unknown block type</div>;
@@ -379,23 +393,68 @@ export const DraggableLandingPagePreview: React.FC<
     setBlocks(page.blocks);
   }, [page.blocks]);
 
-  const moveBlock = (dragIndex: number, hoverIndex: number) => {
-    const dragBlock = blocks[dragIndex];
-    const newBlocks = [...blocks];
-    newBlocks.splice(dragIndex, 1);
-    newBlocks.splice(hoverIndex, 0, dragBlock);
+  const findBlockById = (
+    blocks: LandingPageBlock[],
+    id: string,
+  ): LandingPageBlock | null => {
+    for (const block of blocks) {
+      if (block.id === id) return block;
+      if (block.children) {
+        const found = findBlockById(block.children, id);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+
+  const moveBlock = (
+    dragIndex: number,
+    hoverIndex: number,
+    dragParentId?: string,
+    hoverParentId?: string,
+  ) => {
+    const newBlocks = JSON.parse(JSON.stringify(blocks));
+
+    // Find the drag collection and block
+    let dragCollection: LandingPageBlock[] = newBlocks;
+    if (dragParentId) {
+      const parent = findBlockById(newBlocks, dragParentId);
+      if (parent && parent.children) {
+        dragCollection = parent.children;
+      }
+    }
+    const dragBlock = dragCollection[dragIndex];
+
+    if (!dragBlock) return;
+
+    // Find the hover collection
+    let hoverCollection: LandingPageBlock[] = newBlocks;
+    if (hoverParentId) {
+      const parent = findBlockById(newBlocks, hoverParentId);
+      if (parent) {
+        if (!parent.children) parent.children = [];
+        hoverCollection = parent.children;
+      }
+    }
+
+    // Perform the move
+    dragCollection.splice(dragIndex, 1);
+
+    // If we moved between collections, we need to adjust the hover index if necessary
+    // but splice handles it fine.
+    hoverCollection.splice(hoverIndex, 0, dragBlock);
+
     setBlocks(newBlocks);
     onReorderBlocks(newBlocks);
   };
 
-  const handleAddBlockAtIndex = (blockIndex: number, newBlock: LandingPageBlock) => {
-    const newBlocks = [...blocks];
-    newBlocks.splice(blockIndex, 0, newBlock);
-    setBlocks(newBlocks);
-    onReorderBlocks(newBlocks);
+  const handleAddBlockAtIndex = (blockIndex: number, newBlock: LandingPageBlock, parentId?: string) => {
+    if (onAddBlock) {
+      onAddBlock(blockIndex, newBlock, parentId);
+    }
   };
 
-  const renderBlock = (block: LandingPageBlock, index: number) => {
+  const renderBlock = (block: LandingPageBlock, index: number, parentId?: string) => {
     const isSelected = selectedBlockId === block.id;
 
     return (
@@ -403,6 +462,7 @@ export const DraggableLandingPagePreview: React.FC<
         key={block.id}
         block={block}
         index={index}
+        parentId={parentId}
         isSelected={isSelected}
         selectedElement={isSelected ? selectedElement : null}
         onSelect={() => {
@@ -415,9 +475,10 @@ export const DraggableLandingPagePreview: React.FC<
         }
         onDelete={() => onDeleteBlock(block.id)}
         onDuplicate={() => onDuplicateBlock?.(block.id)}
-        onAddBlock={onAddBlock ? handleAddBlockAtIndex : undefined}
+        onAddBlock={(idx, blk) => handleAddBlockAtIndex(idx, blk, parentId)}
         onLinkSelect={onLinkSelect ? (linkIndex, linkType) => onLinkSelect(block.id, linkIndex, linkType) : undefined}
         moveBlock={moveBlock}
+        renderBlock={renderBlock}
       />
     );
   };

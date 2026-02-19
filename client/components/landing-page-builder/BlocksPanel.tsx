@@ -32,6 +32,7 @@ import {
   createParagraphBlock,
   createRichTextBlock,
   createQuoteBlock,
+  createTextHeadingsBlock,
 } from "./utils";
 import { LandingPageBlock } from "./types";
 
@@ -114,6 +115,12 @@ export const BlocksPanel: React.FC<BlocksPanelProps> = ({
           icon: <Image className="w-6 h-6" />,
           label: "Hero",
           onCreate: createHeroBlock,
+        },
+        {
+          id: "text-headings",
+          icon: <Type className="w-6 h-6" />,
+          label: "Text & Headings",
+          onCreate: createTextHeadingsBlock,
         },
         {
           id: "features",
