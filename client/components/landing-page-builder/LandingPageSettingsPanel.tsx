@@ -189,20 +189,39 @@ export const LandingPageSettingsPanel: React.FC<
                         type="text"
                         value={String(localProps.headlineHeight || "auto").replace(/[^0-9]/g, "")}
                         onChange={(e) => {
+                          const unit = String(localProps.headlineHeight || "auto").includes("%") ? "%" : "px";
                           const inputValue = e.target.value;
                           const numericOnly = inputValue.replace(/[^0-9]/g, "");
                           if (numericOnly === "") {
                             updateProperty("headlineHeight", "auto");
                             return;
                           }
-                          updateProperty("headlineHeight", `${numericOnly}px`);
+                          const num = parseInt(numericOnly, 10);
+                          if (unit === "%" && num > 100) {
+                            return;
+                          }
+                          updateProperty("headlineHeight", `${num}${unit}`);
                         }}
                         placeholder="auto or number"
                         className="flex-1"
                       />
-                      <div className="px-3 py-2 border border-input rounded-md bg-background text-sm flex items-center text-gray-500">
-                        px
-                      </div>
+                      <select
+                        value={String(localProps.headlineHeight || "auto").includes("%") ? "%" : "px"}
+                        onChange={(e) => {
+                          const currentNum = parseInt(String(localProps.headlineHeight || "100").replace(/[^0-9]/g, ""), 10) || 100;
+                          const unit = e.target.value;
+                          if (unit === "%") {
+                            const cappedNum = Math.min(currentNum, 100);
+                            updateProperty("headlineHeight", `${cappedNum}${unit}`);
+                          } else {
+                            updateProperty("headlineHeight", `${currentNum}${unit}`);
+                          }
+                        }}
+                        className="px-3 py-2 border border-input rounded-md bg-background text-sm"
+                      >
+                        <option value="%">%</option>
+                        <option value="px">px</option>
+                      </select>
                       <Button
                         variant="outline"
                         size="sm"
@@ -304,20 +323,39 @@ export const LandingPageSettingsPanel: React.FC<
                         type="text"
                         value={String(localProps.subheadingHeight || "auto").replace(/[^0-9]/g, "")}
                         onChange={(e) => {
+                          const unit = String(localProps.subheadingHeight || "auto").includes("%") ? "%" : "px";
                           const inputValue = e.target.value;
                           const numericOnly = inputValue.replace(/[^0-9]/g, "");
                           if (numericOnly === "") {
                             updateProperty("subheadingHeight", "auto");
                             return;
                           }
-                          updateProperty("subheadingHeight", `${numericOnly}px`);
+                          const num = parseInt(numericOnly, 10);
+                          if (unit === "%" && num > 100) {
+                            return;
+                          }
+                          updateProperty("subheadingHeight", `${num}${unit}`);
                         }}
                         placeholder="auto or number"
                         className="flex-1"
                       />
-                      <div className="px-3 py-2 border border-input rounded-md bg-background text-sm flex items-center text-gray-500">
-                        px
-                      </div>
+                      <select
+                        value={String(localProps.subheadingHeight || "auto").includes("%") ? "%" : "px"}
+                        onChange={(e) => {
+                          const currentNum = parseInt(String(localProps.subheadingHeight || "100").replace(/[^0-9]/g, ""), 10) || 100;
+                          const unit = e.target.value;
+                          if (unit === "%") {
+                            const cappedNum = Math.min(currentNum, 100);
+                            updateProperty("subheadingHeight", `${cappedNum}${unit}`);
+                          } else {
+                            updateProperty("subheadingHeight", `${currentNum}${unit}`);
+                          }
+                        }}
+                        className="px-3 py-2 border border-input rounded-md bg-background text-sm"
+                      >
+                        <option value="%">%</option>
+                        <option value="px">px</option>
+                      </select>
                       <Button
                         variant="outline"
                         size="sm"
@@ -415,20 +453,39 @@ export const LandingPageSettingsPanel: React.FC<
                         type="text"
                         value={String(localProps.ctaButtonHeight || "auto").replace(/[^0-9]/g, "")}
                         onChange={(e) => {
+                          const unit = String(localProps.ctaButtonHeight || "auto").includes("%") ? "%" : "px";
                           const inputValue = e.target.value;
                           const numericOnly = inputValue.replace(/[^0-9]/g, "");
                           if (numericOnly === "") {
                             updateProperty("ctaButtonHeight", "auto");
                             return;
                           }
-                          updateProperty("ctaButtonHeight", `${numericOnly}px`);
+                          const num = parseInt(numericOnly, 10);
+                          if (unit === "%" && num > 100) {
+                            return;
+                          }
+                          updateProperty("ctaButtonHeight", `${num}${unit}`);
                         }}
                         placeholder="auto or number"
                         className="flex-1"
                       />
-                      <div className="px-3 py-2 border border-input rounded-md bg-background text-sm flex items-center text-gray-500">
-                        px
-                      </div>
+                      <select
+                        value={String(localProps.ctaButtonHeight || "auto").includes("%") ? "%" : "px"}
+                        onChange={(e) => {
+                          const currentNum = parseInt(String(localProps.ctaButtonHeight || "100").replace(/[^0-9]/g, ""), 10) || 100;
+                          const unit = e.target.value;
+                          if (unit === "%") {
+                            const cappedNum = Math.min(currentNum, 100);
+                            updateProperty("ctaButtonHeight", `${cappedNum}${unit}`);
+                          } else {
+                            updateProperty("ctaButtonHeight", `${currentNum}${unit}`);
+                          }
+                        }}
+                        className="px-3 py-2 border border-input rounded-md bg-background text-sm"
+                      >
+                        <option value="%">%</option>
+                        <option value="px">px</option>
+                      </select>
                       <Button
                         variant="outline"
                         size="sm"
