@@ -246,6 +246,24 @@ export const LandingPageSettingsPanel: React.FC<
                       </Button>
                     </div>
                   </div>
+                  <div className="mt-4">
+                    <Label className="text-sm font-medium block mb-2">Text Alignment</Label>
+                    <div className="flex gap-2">
+                      {["left", "center", "right"].map((align) => (
+                        <button
+                          key={align}
+                          onClick={() => updateProperty("headlineAlign", align)}
+                          className={`flex-1 py-2 px-3 rounded border text-xs font-medium transition-colors ${
+                            localProps.headlineAlign === align
+                              ? "bg-valasys-orange text-white border-valasys-orange"
+                              : "border-gray-300 hover:border-valasys-orange"
+                          }`}
+                        >
+                          {align.charAt(0).toUpperCase() + align.slice(1)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </>
             )}
@@ -382,6 +400,24 @@ export const LandingPageSettingsPanel: React.FC<
                       </Button>
                     </div>
                   </div>
+                  <div className="mt-4">
+                    <Label className="text-sm font-medium block mb-2">Text Alignment</Label>
+                    <div className="flex gap-2">
+                      {["left", "center", "right"].map((align) => (
+                        <button
+                          key={align}
+                          onClick={() => updateProperty("subheadingAlign", align)}
+                          className={`flex-1 py-2 px-3 rounded border text-xs font-medium transition-colors ${
+                            localProps.subheadingAlign === align
+                              ? "bg-valasys-orange text-white border-valasys-orange"
+                              : "border-gray-300 hover:border-valasys-orange"
+                          }`}
+                        >
+                          {align.charAt(0).toUpperCase() + align.slice(1)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </>
             )}
@@ -512,6 +548,24 @@ export const LandingPageSettingsPanel: React.FC<
                       >
                         Reset
                       </Button>
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <Label className="text-sm font-medium block mb-2">Text Alignment</Label>
+                    <div className="flex gap-2">
+                      {["left", "center", "right"].map((align) => (
+                        <button
+                          key={align}
+                          onClick={() => updateProperty("ctaButtonAlign", align)}
+                          className={`flex-1 py-2 px-3 rounded border text-xs font-medium transition-colors ${
+                            localProps.ctaButtonAlign === align
+                              ? "bg-valasys-orange text-white border-valasys-orange"
+                              : "border-gray-300 hover:border-valasys-orange"
+                          }`}
+                        >
+                          {align.charAt(0).toUpperCase() + align.slice(1)}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 </div>

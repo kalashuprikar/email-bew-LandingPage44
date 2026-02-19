@@ -292,10 +292,26 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
 
     return (
       <div
+        draggable
         className={`relative mb-4 px-4 py-2 rounded transition-all cursor-move group w-full ${
           selectedElement === "heading" ? "border-2 border-solid border-valasys-orange" :
           hoveredElement === "heading" ? "border-2 border-dashed border-valasys-orange" : ""
         }`}
+        onDragStart={(e) => {
+          e.dataTransfer.effectAllowed = "move";
+          e.dataTransfer.setData("text/plain", "heading");
+        }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
+        }}
+        onDrop={(e) => {
+          e.preventDefault();
+          const draggedId = e.dataTransfer.getData("text/plain");
+          if (draggedId && draggedId !== "heading") {
+            handleElementDrop(draggedId, "heading");
+          }
+        }}
         onMouseEnter={() => !isEditingHeading && setHoveredElement("heading")}
         onMouseLeave={() => setHoveredElement(null)}
         onClick={(e) => {
@@ -323,6 +339,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
             style={{
               width: props.headlineWidth ?? "100%",
               height: props.headlineHeight ?? "auto",
+              textAlign: (props.headlineAlign || "center") as any,
             }}
             autoFocus
             onFocus={(e) => {
@@ -337,6 +354,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
               wordBreak: "break-word",
               width: props.headlineWidth ?? "100%",
               height: props.headlineHeight ?? "auto",
+              textAlign: (props.headlineAlign || "center") as any,
             }}
             onDoubleClick={(e) => {
               e.stopPropagation();
@@ -384,10 +402,26 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
 
     return (
       <div
+        draggable
         className={`relative mb-8 px-4 py-2 rounded transition-all w-full cursor-move group ${
           selectedElement === "subheading" ? "border-2 border-solid border-valasys-orange" :
           hoveredElement === "subheading" ? "border-2 border-dashed border-valasys-orange" : ""
         }`}
+        onDragStart={(e) => {
+          e.dataTransfer.effectAllowed = "move";
+          e.dataTransfer.setData("text/plain", "subheading");
+        }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
+        }}
+        onDrop={(e) => {
+          e.preventDefault();
+          const draggedId = e.dataTransfer.getData("text/plain");
+          if (draggedId && draggedId !== "subheading") {
+            handleElementDrop(draggedId, "subheading");
+          }
+        }}
         onMouseEnter={() => !isEditingSubheading && setHoveredElement("subheading")}
         onMouseLeave={() => setHoveredElement(null)}
         onClick={(e) => {
@@ -415,6 +449,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
             style={{
               width: props.subheadingWidth ?? "100%",
               height: props.subheadingHeight ?? "auto",
+              textAlign: (props.subheadingAlign || "center") as any,
             }}
             autoFocus
             onFocus={(e) => {
@@ -429,6 +464,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
               wordBreak: "break-word",
               width: props.subheadingWidth ?? "100%",
               height: props.subheadingHeight ?? "auto",
+              textAlign: (props.subheadingAlign || "center") as any,
             }}
             onDoubleClick={(e) => {
               e.stopPropagation();
@@ -476,10 +512,29 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
 
     return (
       <div
-        className={`relative px-4 py-2 rounded transition-all cursor-move group ${
+        draggable
+        className={`relative w-full px-4 py-2 rounded transition-all cursor-move group ${
           selectedElement === "button" ? "border-2 border-solid border-valasys-orange" :
           hoveredElement === "button" ? "border-2 border-dashed border-valasys-orange" : ""
         }`}
+        style={{
+          textAlign: (props.ctaButtonAlign || "center") as any,
+        }}
+        onDragStart={(e) => {
+          e.dataTransfer.effectAllowed = "move";
+          e.dataTransfer.setData("text/plain", "button");
+        }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
+        }}
+        onDrop={(e) => {
+          e.preventDefault();
+          const draggedId = e.dataTransfer.getData("text/plain");
+          if (draggedId && draggedId !== "button") {
+            handleElementDrop(draggedId, "button");
+          }
+        }}
         onMouseEnter={() => !isEditingButton && setHoveredElement("button")}
         onMouseLeave={() => setHoveredElement(null)}
         onClick={(e) => {
