@@ -115,7 +115,7 @@ ${htmlContent.substring(htmlContent.indexOf('<div style="max-width:'), htmlConte
 
     setDownloaded(true);
     setOpenDownloadTooltip(true);
-    toast.success("Pure HTML with inline CSS downloaded successfully");
+    toast.success("HTML with inline CSS downloaded successfully");
     setTimeout(() => {
       setDownloaded(false);
       setOpenDownloadTooltip(false);
