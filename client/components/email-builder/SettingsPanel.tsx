@@ -259,6 +259,21 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       <option value="px">px</option>
                     </select>
                   </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-xs mt-2"
+                    onClick={() => {
+                      onBlockUpdate({
+                        ...block,
+                        width: 100,
+                        widthUnit: "%",
+                      });
+                      setTitleWidthInput("100");
+                    }}
+                  >
+                    Full Width (100%)
+                  </Button>
                 </div>
 
                 <div>
@@ -857,6 +872,20 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       <option value="px">px</option>
                     </select>
                   </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-xs mt-2"
+                    onClick={() => {
+                      onBlockUpdate({
+                        ...block,
+                        width: 100,
+                        widthUnit: "%",
+                      });
+                    }}
+                  >
+                    Full Width (100%)
+                  </Button>
                 </div>
 
                 <div>
@@ -1684,6 +1713,20 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       <option value="px">px</option>
                     </select>
                   </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-xs mt-2"
+                    onClick={() => {
+                      onBlockUpdate({
+                        ...block,
+                        width: 100,
+                        widthUnit: "%",
+                      });
+                    }}
+                  >
+                    Full Width (100%)
+                  </Button>
                 </div>
 
                 <div>
@@ -2277,6 +2320,20 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       <option value="%">%</option>
                     </select>
                   </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-xs mt-2"
+                    onClick={() => {
+                      onBlockUpdate({
+                        ...block,
+                        width: 100,
+                        widthUnit: "%",
+                      });
+                    }}
+                  >
+                    Full Width (100%)
+                  </Button>
                 </div>
                 <div>
                   <Label
@@ -4021,6 +4078,21 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       <option value="px">px</option>
                     </select>
                   </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-xs mt-2"
+                    onClick={() => {
+                      onBlockUpdate({
+                        ...block,
+                        width: 100,
+                        widthUnit: "%",
+                      });
+                      setVideoWidthInput("100");
+                    }}
+                  >
+                    Full Width (100%)
+                  </Button>
                 </div>
 
                 <div>
