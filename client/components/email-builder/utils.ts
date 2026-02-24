@@ -1439,13 +1439,16 @@ export function renderTemplateToHTML(template: EmailTemplate): string {
   const bodyContent = groupedBlocks
     .map((item) => {
       if (item._isInlineGroup) {
+        const blockCount = item.blocks.length;
+        const blockWidth = blockCount > 0 ? Math.floor((100 - (blockCount - 1) * 2.4) / blockCount) : 100;
         const inlineHtml = item.blocks
-          .map((block: any) => {
+          .map((block: any, idx: number) => {
             const blockHtml = renderBlockToHTML(block);
-            return `<div style="flex: 0 0 auto;">${blockHtml}</div>`;
+            const marginRight = idx < blockCount - 1 ? "24px" : "0";
+            return `<div style="display: inline-block; width: ${blockWidth}%; margin-right: ${marginRight}; vertical-align: top; box-sizing: border-box;">${blockHtml}</div>`;
           })
           .join("");
-        return `<div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; width: 100%; margin: 0 auto; flex-wrap: wrap;">${inlineHtml}</div>`;
+        return `<div style="width: 100%; margin: 0 auto;">${inlineHtml}</div>`;
       }
       return renderBlockToHTML(item);
     })
