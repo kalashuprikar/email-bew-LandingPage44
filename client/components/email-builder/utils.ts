@@ -1372,7 +1372,7 @@ export function renderBlockToHTML(block: ContentBlock): string {
           : "";
       return `<div style="background-color: ${cardBlock.backgroundColor}; border-radius: ${cardBlock.borderRadius}px; ${borderStyle} padding: ${cardBlock.padding}px; margin: ${cardBlock.margin}px; max-width: 600px; margin-left: auto; margin-right: auto;">
         <img src="${cardBlock.image}" alt="${cardBlock.imageAlt}" style="width: 100%; height: 300px; object-fit: cover; display: block; border-radius: ${cardBlock.borderRadius}px ${cardBlock.borderRadius}px 0 0;" />
-        <div style="text-align: center; padding: 20px;">
+        <div style="text-align: center; padding: 0;">
           <h2 style="margin: 0 0 12px 0; font-size: 24px; font-weight: bold; color: #000;">${cardBlock.title}</h2>
           <p style="margin: 0 0 16px 0; font-size: 14px; color: #666; line-height: 1.5;">${cardBlock.description}</p>
           <a href="${cardBlock.buttonLink}" style="display: inline-block; background-color: #FF6A00; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 14px;">${cardBlock.buttonText}</a>
