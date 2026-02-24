@@ -1,6 +1,7 @@
 import React from "react";
 import { TitleBlock } from "../types";
 import { Edit2 } from "lucide-react";
+import { getPaddingString, getMarginString } from "../utils";
 
 interface TitleBlockComponentProps {
   block: TitleBlock;
@@ -41,19 +42,7 @@ export const TitleBlockComponent: React.FC<TitleBlockComponentProps> = ({
   const containerStyle = {
     userSelect: "none" as const,
     width: block.width ? `${block.width}${block.widthUnit || "%"}` : "100%",
-    margin: `${block.margin || 0}px`,
-    marginLeft: isNaN(block.marginLeft as any)
-      ? block.margin || 0
-      : block.marginLeft,
-    marginRight: isNaN(block.marginRight as any)
-      ? block.margin || 0
-      : block.marginRight,
-    marginTop: isNaN(block.marginTop as any)
-      ? block.margin || 0
-      : block.marginTop,
-    marginBottom: isNaN(block.marginBottom as any)
-      ? block.margin || 0
-      : block.marginBottom,
+    margin: getMarginString(block),
     boxSizing: "border-box" as const,
     overflow: "hidden" as const,
   };
@@ -65,7 +54,7 @@ export const TitleBlockComponent: React.FC<TitleBlockComponentProps> = ({
     textAlign: block.alignment as any,
     fontWeight: block.fontWeight as any,
     margin: 0,
-    padding: `${block.paddingTop || block.padding || 8}px ${block.paddingRight || block.padding || 8}px ${block.paddingBottom || block.padding || 8}px ${block.paddingLeft || block.padding || 8}px`,
+    padding: getPaddingString(block),
     userSelect: "none" as const,
     borderRadius: block.borderRadius ? `${block.borderRadius}px` : undefined,
     border: block.borderWidth

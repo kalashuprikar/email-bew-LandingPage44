@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { ImageBlock } from "../types";
 import { Upload, Copy, Trash2 } from "lucide-react";
+import { getPaddingString, getMarginString } from "../utils";
 
 interface ImageBlockComponentProps {
   block: ImageBlock;
@@ -104,10 +105,14 @@ export const ImageBlockComponent: React.FC<ImageBlockComponentProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`relative p-4 transition-all ${
+      className={`relative transition-all ${
         isSelected ? "ring-2 ring-valasys-orange" : ""
       }`}
-      style={{ textAlign: block.alignment as any }}
+      style={{
+        textAlign: block.alignment as any,
+        padding: getPaddingString(block),
+        margin: getMarginString(block),
+      }}
     >
       {block.src ? (
         <div
