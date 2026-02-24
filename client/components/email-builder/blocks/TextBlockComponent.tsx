@@ -1,7 +1,6 @@
 import React from "react";
 import { TextBlock } from "../types";
 import { Edit2, Copy, Trash2 } from "lucide-react";
-import { getPaddingString, getMarginString } from "../utils";
 
 interface TextBlockComponentProps {
   block: TextBlock;
@@ -64,7 +63,7 @@ export const TextBlockComponent: React.FC<TextBlockComponentProps> = ({
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       style={{
-        margin: getMarginString(block),
+        margin: `${block.margin}px`,
         display: "block",
         userSelect: "none",
       }}
@@ -84,7 +83,7 @@ export const TextBlockComponent: React.FC<TextBlockComponentProps> = ({
             textAlign: block.alignment as any,
             fontWeight: block.fontWeight as any,
             fontStyle: block.fontStyle as any,
-            padding: getPaddingString(block),
+            padding: `${block.padding}px`,
             width: getWidthStyle(),
             borderWidth: `${block.borderWidth}px`,
             borderColor: block.borderColor,
@@ -107,7 +106,7 @@ export const TextBlockComponent: React.FC<TextBlockComponentProps> = ({
             textAlign: block.alignment as any,
             fontWeight: block.fontWeight as any,
             fontStyle: block.fontStyle as any,
-            padding: getPaddingString(block),
+            padding: `${block.padding}px`,
             width: getWidthStyle(),
             borderWidth: `${block.borderWidth}px`,
             borderColor: block.borderColor,

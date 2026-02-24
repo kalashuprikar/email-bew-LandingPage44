@@ -39,38 +39,6 @@ export function generateId(): string {
   return `${timestamp}-${random1}-${random2}-${random3}`;
 }
 
-export function getPaddingString(block: any): string {
-  // Use per-side padding if available, fallback to uniform padding
-  const top = block.paddingTop !== undefined ? block.paddingTop : block.padding ?? 0;
-  const right = block.paddingRight !== undefined ? block.paddingRight : block.padding ?? 0;
-  const bottom = block.paddingBottom !== undefined ? block.paddingBottom : block.padding ?? 0;
-  const left = block.paddingLeft !== undefined ? block.paddingLeft : block.padding ?? 0;
-
-  // If all sides are the same, return shorthand
-  if (top === right && right === bottom && bottom === left) {
-    return `${top}px`;
-  }
-
-  // Return full CSS padding notation
-  return `${top}px ${right}px ${bottom}px ${left}px`;
-}
-
-export function getMarginString(block: any): string {
-  // Use per-side margin if available, fallback to uniform margin
-  const top = block.marginTop !== undefined ? block.marginTop : block.margin ?? 0;
-  const right = block.marginRight !== undefined ? block.marginRight : block.margin ?? 0;
-  const bottom = block.marginBottom !== undefined ? block.marginBottom : block.margin ?? 0;
-  const left = block.marginLeft !== undefined ? block.marginLeft : block.margin ?? 0;
-
-  // If all sides are the same, return shorthand
-  if (top === right && right === bottom && bottom === left) {
-    return `${top}px`;
-  }
-
-  // Return full CSS margin notation
-  return `${top}px ${right}px ${bottom}px ${left}px`;
-}
-
 export function createTitleBlock(content = "Click to edit title"): TitleBlock {
   return {
     type: "title",

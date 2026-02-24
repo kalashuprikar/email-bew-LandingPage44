@@ -110,33 +110,12 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       setPaddingRight(value);
       setPaddingBottom(value);
       setPaddingLeft(value);
-      onBlockUpdate({
-        ...block,
-        padding: value,
-        paddingTop: value,
-        paddingRight: value,
-        paddingBottom: value,
-        paddingLeft: value
-      });
+      onBlockUpdate({ ...block, padding: value });
     } else if (side) {
-      const updatedBlock = { ...block } as any;
-      if (side === "top") {
-        setPaddingTop(value);
-        updatedBlock.paddingTop = value;
-      }
-      if (side === "right") {
-        setPaddingRight(value);
-        updatedBlock.paddingRight = value;
-      }
-      if (side === "bottom") {
-        setPaddingBottom(value);
-        updatedBlock.paddingBottom = value;
-      }
-      if (side === "left") {
-        setPaddingLeft(value);
-        updatedBlock.paddingLeft = value;
-      }
-      onBlockUpdate(updatedBlock);
+      if (side === "top") setPaddingTop(value);
+      if (side === "right") setPaddingRight(value);
+      if (side === "bottom") setPaddingBottom(value);
+      if (side === "left") setPaddingLeft(value);
     }
   };
 
@@ -150,33 +129,12 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       setMarginRight(value);
       setMarginBottom(value);
       setMarginLeft(value);
-      onBlockUpdate({
-        ...block,
-        margin: value,
-        marginTop: value,
-        marginRight: value,
-        marginBottom: value,
-        marginLeft: value
-      });
+      onBlockUpdate({ ...block, margin: value });
     } else if (side) {
-      const updatedBlock = { ...block } as any;
-      if (side === "top") {
-        setMarginTop(value);
-        updatedBlock.marginTop = value;
-      }
-      if (side === "right") {
-        setMarginRight(value);
-        updatedBlock.marginRight = value;
-      }
-      if (side === "bottom") {
-        setMarginBottom(value);
-        updatedBlock.marginBottom = value;
-      }
-      if (side === "left") {
-        setMarginLeft(value);
-        updatedBlock.marginLeft = value;
-      }
-      onBlockUpdate(updatedBlock);
+      if (side === "top") setMarginTop(value);
+      if (side === "right") setMarginRight(value);
+      if (side === "bottom") setMarginBottom(value);
+      if (side === "left") setMarginLeft(value);
     }
   };
 
