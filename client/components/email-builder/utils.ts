@@ -1459,13 +1459,12 @@ export function renderTemplateToHTML(template: EmailTemplate): string {
   const bodyContent = groupedBlocks
     .map((item) => {
       if (item._isInlineGroup) {
-        const blockCount = item.blocks.length;
-        const blockWidth = blockCount > 0 ? Math.floor((100 - (blockCount - 1) * 2.4) / blockCount) : 100;
+        // For email clients, render inline blocks stacked vertically
+        // (email clients have limited support for side-by-side layouts)
         const inlineHtml = item.blocks
-          .map((block: any, idx: number) => {
+          .map((block: any) => {
             const blockHtml = renderBlockToHTML(block);
-            const marginRight = idx < blockCount - 1 ? "24px" : "0";
-            return `<div style="display: inline-block; width: ${blockWidth}%; margin-right: ${marginRight}; vertical-align: top; box-sizing: border-box;">${blockHtml}</div>`;
+            return `<div style="width: 100%; margin-bottom: 16px;">${blockHtml}</div>`;
           })
           .join("");
         return `<div style="width: 100%; margin: 0 auto;">${inlineHtml}</div>`;
