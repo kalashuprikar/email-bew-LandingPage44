@@ -12,6 +12,8 @@ interface TextBlockComponentProps {
   onDuplicate?: (block: TextBlock, position: number) => void;
   onDelete?: (blockId: string) => void;
   blockIndex?: number;
+  isTextElementSelected?: boolean;
+  onTextElementSelect?: (selected: boolean) => void;
 }
 
 export const TextBlockComponent: React.FC<TextBlockComponentProps> = ({
@@ -24,6 +26,8 @@ export const TextBlockComponent: React.FC<TextBlockComponentProps> = ({
   onDuplicate,
   onDelete,
   blockIndex = 0,
+  isTextElementSelected = false,
+  onTextElementSelect,
 }) => {
   const [isHovering, setIsHovering] = React.useState(false);
 
@@ -53,6 +57,33 @@ export const TextBlockComponent: React.FC<TextBlockComponentProps> = ({
     }
   };
 
+  const handleTextElementClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onTextElementSelect?.(!isTextElementSelected);
+  };
+
+  const getTextElementStyles = () => {
+    const elementStyles = block.textElementStyles;
+    return {
+      fontSize: elementStyles?.fontSize !== undefined ? `${elementStyles.fontSize}px` : `${block.fontSize}px`,
+      color: elementStyles?.fontColor || block.fontColor,
+      backgroundColor: elementStyles?.backgroundColor !== undefined ? elementStyles.backgroundColor : block.backgroundColor,
+      textAlign: (elementStyles?.textAlignment || block.textAlignment || block.alignment) as any,
+      lineHeight: elementStyles?.lineHeight || block.lineHeight || 1.2,
+      fontWeight: elementStyles?.fontWeight || block.fontWeight,
+      fontStyle: elementStyles?.fontStyle || block.fontStyle,
+      padding: elementStyles?.padding !== undefined
+        ? `${elementStyles.padding}px`
+        : elementStyles?.paddingTop !== undefined || elementStyles?.paddingRight !== undefined || elementStyles?.paddingBottom !== undefined || elementStyles?.paddingLeft !== undefined
+        ? `${elementStyles.paddingTop ?? block.padding}px ${elementStyles.paddingRight ?? block.padding}px ${elementStyles.paddingBottom ?? block.padding}px ${elementStyles.paddingLeft ?? block.padding}px`
+        : `${block.padding}px`,
+      borderWidth: `${elementStyles?.borderWidth !== undefined ? elementStyles.borderWidth : block.borderWidth}px`,
+      borderColor: elementStyles?.borderColor || block.borderColor,
+      borderStyle: (elementStyles?.borderWidth !== undefined ? elementStyles.borderWidth : block.borderWidth) > 0 ? "solid" : "none",
+      borderRadius: `${elementStyles?.borderRadius !== undefined ? elementStyles.borderRadius : block.borderRadius}px`,
+    };
+  };
+
   return (
     <div
       className={`relative transition-all cursor-pointer user-select-none ${
@@ -68,28 +99,25 @@ export const TextBlockComponent: React.FC<TextBlockComponentProps> = ({
         userSelect: "none",
       }}
     >
+      {isTextElementSelected && (
+        <div className="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded mb-2">
+          Text Element Selected
+        </div>
+      )}
       {isEditing ? (
         <textarea
           value={block.content}
           onChange={(e) => onContentChange(e.target.value)}
           onBlur={() => onEditingChange?.(null)}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleTextElementClick(e);
+          }}
           autoFocus
-          className="w-full rounded px-2 py-1 font-serif outline-none"
+          className={`w-full rounded px-2 py-1 font-serif outline-none ${isTextElementSelected ? "ring-2 ring-blue-400" : ""}`}
           style={{
-            fontSize: `${block.fontSize}px`,
-            color: block.fontColor,
-            backgroundColor: block.backgroundColor,
-            textAlign: (block.textAlignment || block.alignment) as any,
-            lineHeight: block.lineHeight || 1.2,
-            fontWeight: block.fontWeight as any,
-            fontStyle: block.fontStyle as any,
-            padding: `${block.padding}px`,
+            ...getTextElementStyles(),
             width: getWidthStyle(),
-            borderWidth: `${block.borderWidth}px`,
-            borderColor: block.borderColor,
-            borderStyle: block.borderWidth > 0 ? "solid" : "none",
-            borderRadius: `${block.borderRadius}px`,
             userSelect: "text",
             boxSizing: "border-box",
             overflow: "auto",
@@ -100,20 +128,11 @@ export const TextBlockComponent: React.FC<TextBlockComponentProps> = ({
         />
       ) : (
         <p
+          onClick={handleTextElementClick}
+          className={`transition-all ${isTextElementSelected ? "ring-2 ring-blue-400 rounded" : ""}`}
           style={{
-            fontSize: `${block.fontSize}px`,
-            color: block.fontColor,
-            backgroundColor: block.backgroundColor,
-            textAlign: (block.textAlignment || block.alignment) as any,
-            lineHeight: block.lineHeight || 1.2,
-            fontWeight: block.fontWeight as any,
-            fontStyle: block.fontStyle as any,
-            padding: `${block.padding}px`,
+            ...getTextElementStyles(),
             width: getWidthStyle(),
-            borderWidth: `${block.borderWidth}px`,
-            borderColor: block.borderColor,
-            borderStyle: block.borderWidth > 0 ? "solid" : "none",
-            borderRadius: `${block.borderRadius}px`,
             margin: 0,
             userSelect: "none",
             boxSizing: "border-box",

@@ -530,12 +530,6 @@ export const BlocksPanel: React.FC<BlocksPanelProps> = ({ onAddBlock }) => {
           >
             Sections
           </TabsTrigger>
-          <TabsTrigger
-            value="saved"
-            className="flex-1 rounded-none px-4 py-3 text-gray-600 border-b-2 border-transparent data-[state=active]:border-valasys-orange data-[state=active]:text-gray-900 data-[state=active]:bg-white shadow-none"
-          >
-            Saved
-          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="blocks" className="flex flex-col m-0">
@@ -559,19 +553,6 @@ export const BlocksPanel: React.FC<BlocksPanelProps> = ({ onAddBlock }) => {
 
         <TabsContent value="sections" className="flex flex-col m-0">
           <SectionsPanel onAddBlock={onAddBlock} />
-        </TabsContent>
-
-        <TabsContent value="saved" className="flex flex-col m-0 p-4">
-          <div className="flex items-center justify-center py-8">
-            <div className="space-y-3 text-center">
-              <div className="p-4 rounded-lg border border-dashed border-gray-300">
-                <p className="text-sm text-gray-500">
-                  No saved blocks yet. Save your favorite blocks to access them
-                  quickly.
-                </p>
-              </div>
-            </div>
-          </div>
         </TabsContent>
       </Tabs>
     </div>

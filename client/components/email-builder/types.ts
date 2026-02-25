@@ -19,6 +19,24 @@ export type BlockType =
   | "features"
   | "promo";
 
+export interface TextElementStyles {
+  fontSize?: number;
+  fontColor?: string;
+  backgroundColor?: string;
+  textAlignment?: "left" | "center" | "right" | "justify";
+  lineHeight?: number;
+  fontWeight?: "normal" | "bold";
+  fontStyle?: "normal" | "italic";
+  padding?: number;
+  paddingTop?: number;
+  paddingRight?: number;
+  paddingBottom?: number;
+  paddingLeft?: number;
+  borderWidth?: number;
+  borderColor?: string;
+  borderRadius?: number;
+}
+
 export interface TitleBlock {
   type: "title";
   id: string;
@@ -41,6 +59,7 @@ export interface TitleBlock {
   borderRadius: number;
   visibility: "all" | "desktop" | "mobile";
   displayConditions?: any[];
+  textElementStyles?: TextElementStyles;
 }
 
 export interface TextBlock {
@@ -66,6 +85,7 @@ export interface TextBlock {
   borderRadius: number;
   visibility: "all" | "desktop" | "mobile";
   displayConditions?: any[];
+  textElementStyles?: TextElementStyles;
 }
 
 export interface ImageBlock {

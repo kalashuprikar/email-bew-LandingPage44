@@ -14,6 +14,7 @@ interface DraggableBlockProps {
   isSelected: boolean;
   isEditing?: boolean;
   selectedFooterElement?: string | null;
+  selectedSubElementId?: string | null;
   onBlockUpdate: (block: ContentBlock) => void;
   onBlockSelect: (id: string) => void;
   onEditingBlockChange?: (id: string | null) => void;
@@ -33,6 +34,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   isSelected,
   isEditing,
   selectedFooterElement,
+  selectedSubElementId,
   onBlockUpdate,
   onBlockSelect,
   onEditingBlockChange,
@@ -113,6 +115,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
         isSelected={isSelected}
         isEditing={isEditing}
         selectedFooterElement={selectedFooterElement}
+        selectedSubElementId={selectedSubElementId}
         onBlockUpdate={onBlockUpdate}
         onBlockSelect={onBlockSelect}
         onEditingBlockChange={onEditingBlockChange}

@@ -13,6 +13,7 @@ interface EmailCanvasProps {
   selectedBlockId: string | null;
   editingBlockId: string | null;
   selectedFooterElement?: string | null;
+  selectedSubElementId?: string | null;
   onAddBlock: (block: ContentBlock, position?: number) => void;
   onBlockUpdate: (block: ContentBlock) => void;
   onBlockSelect: (id: string) => void;
@@ -33,6 +34,7 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
   selectedBlockId,
   editingBlockId,
   selectedFooterElement,
+  selectedSubElementId,
   onAddBlock,
   onBlockUpdate,
   onBlockSelect,
@@ -288,6 +290,7 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
                                 isSelected={selectedBlockId === inlineBlock.id}
                                 isEditing={editingBlockId === inlineBlock.id}
                                 selectedFooterElement={selectedFooterElement}
+                                selectedSubElementId={selectedBlockId === inlineBlock.id ? selectedSubElementId : null}
                                 onBlockUpdate={onBlockUpdate}
                                 onBlockSelect={(id) => {
                                   onBlockSelect(id);
@@ -387,6 +390,7 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
                         isSelected={selectedBlockId === block.id}
                         isEditing={editingBlockId === block.id}
                         selectedFooterElement={selectedFooterElement}
+                        selectedSubElementId={selectedBlockId === block.id ? selectedSubElementId : null}
                         onBlockUpdate={onBlockUpdate}
                         onBlockSelect={onBlockSelect}
                         onSubElementSelect={onSubElementSelect}
