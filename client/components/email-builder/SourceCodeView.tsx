@@ -8,13 +8,7 @@ import {
   TooltipContent,
   TooltipProvider,
 } from "@/components/ui/tooltip";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { Copy, Download } from "lucide-react";
+import { Copy } from "lucide-react";
 import { toast } from "sonner";
 
 interface SourceCodeViewProps {
@@ -23,9 +17,7 @@ interface SourceCodeViewProps {
 
 export const SourceCodeView: React.FC<SourceCodeViewProps> = ({ template }) => {
   const [copied, setCopied] = useState(false);
-  const [downloaded, setDownloaded] = useState(false);
   const [openTooltip, setOpenTooltip] = useState(false);
-  const [openDownloadTooltip, setOpenDownloadTooltip] = useState(false);
 
   const htmlContent = renderTemplateToHTML(template);
 
@@ -81,47 +73,6 @@ export const SourceCodeView: React.FC<SourceCodeViewProps> = ({ template }) => {
     copyToClipboard();
   }, [htmlContent]);
 
-  const handleDownloadInlineHTML = () => {
-    // Create pure HTML with inline CSS
-    const docBgColor = template.documentBackgroundColor || "#ffffff";
-    const inlineHTMLContent = `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${template.subject}</title>
-  <style>
-    html, body {
-      background-color: ${docBgColor} !important;
-      margin: 0;
-      padding: 0;
-    }
-  </style>
-</head>
-<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: ${docBgColor};">
-  <div style="max-width: 600px; margin: 0 auto; background-color: ${template.backgroundColor}; border: 1px solid #ddd; border-radius: 4px; padding: ${template.padding}px; box-sizing: border-box; overflow: hidden;">
-${htmlContent.substring(htmlContent.indexOf('<div style="max-width:'), htmlContent.lastIndexOf("</div>") + 6)}
-  </div>
-</body>
-</html>`;
-
-    const element = document.createElement("a");
-    const file = new Blob([inlineHTMLContent], { type: "text/html" });
-    element.href = URL.createObjectURL(file);
-    element.download = `${template.name || "template"}.html`;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-
-    setDownloaded(true);
-    setOpenDownloadTooltip(true);
-    toast.success("HTML with inline CSS downloaded successfully");
-    setTimeout(() => {
-      setDownloaded(false);
-      setOpenDownloadTooltip(false);
-    }, 2000);
-  };
-
   return (
     <div className="flex flex-col h-full bg-gray-50">
       {/* Header with Actions */}
@@ -144,32 +95,6 @@ ${htmlContent.substring(htmlContent.indexOf('<div style="max-width:'), htmlConte
               </TooltipTrigger>
               <TooltipContent className="font-medium" side="top">
                 {copied ? "Copied!" : "Copy Code"}
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip
-              open={openDownloadTooltip}
-              onOpenChange={setOpenDownloadTooltip}
-            >
-              <TooltipTrigger asChild>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      <Download className="w-4 h-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-max">
-                    <DropdownMenuItem
-                      onClick={handleDownloadInlineHTML}
-                      className="py-2.5"
-                    >
-                      <Download className="w-4 h-4 mr-3" />
-                      Download HTML
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TooltipTrigger>
-              <TooltipContent className="font-medium" side="top">
-                {downloaded ? "Downloaded!" : "Download"}
               </TooltipContent>
             </Tooltip>
           </div>

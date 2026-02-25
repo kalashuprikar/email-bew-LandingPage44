@@ -32,7 +32,7 @@ import {
   generateId,
   renderTemplateToHTML,
 } from "./utils";
-import { Save, Eye, Edit, Trash2, Plus, ChevronLeft, Code, Sparkles, Layout } from "lucide-react";
+import { Save, Eye, Edit, Trash2, Plus, ChevronLeft, Code, Sparkles, Layout, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { EmailCanvas } from "./EmailCanvas";
 import { SourceCodeView } from "./SourceCodeView";
@@ -71,6 +71,8 @@ export const EmailBuilder: React.FC<EmailBuilderProps> = ({
   const [undoStack, setUndoStack] = useState<EmailTemplate[]>([]);
   const [redoStack, setRedoStack] = useState<EmailTemplate[]>([]);
   const [leftSidebarTab, setLeftSidebarTab] = useState<"blocks" | "ai">("blocks");
+  const [openDownloadTooltip, setOpenDownloadTooltip] = useState(false);
+  const [downloaded, setDownloaded] = useState(false);
 
   // Auto-save to localStorage
   useEffect(() => {
@@ -191,6 +193,46 @@ export const EmailBuilder: React.FC<EmailBuilderProps> = ({
     }
   };
 
+  const handleDownloadHTML = () => {
+    const htmlContent = renderTemplateToHTML(template);
+    const docBgColor = template.documentBackgroundColor || "#ffffff";
+    const inlineHTMLContent = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${template.subject}</title>
+  <style>
+    html, body {
+      background-color: ${docBgColor} !important;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: ${docBgColor};">
+  <div style="max-width: 600px; margin: 0 auto; background-color: ${template.backgroundColor}; border: 1px solid #ddd; border-radius: 4px; padding: ${template.padding}px; box-sizing: border-box; overflow: hidden;">
+${htmlContent.substring(htmlContent.indexOf('<div style="max-width:'), htmlContent.lastIndexOf("</div>") + 6)}
+  </div>
+</body>
+</html>`;
+
+    const element = document.createElement("a");
+    const file = new Blob([inlineHTMLContent], { type: "text/html" });
+    element.href = URL.createObjectURL(file);
+    element.download = `${template.name || "template"}.html`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+
+    setDownloaded(true);
+    setOpenDownloadTooltip(true);
+    setTimeout(() => {
+      setDownloaded(false);
+      setOpenDownloadTooltip(false);
+    }, 2000);
+  };
+
   const handleUndo = useCallback(() => {
     if (undoStack.length > 0) {
       const newUndo = [...undoStack];
@@ -300,6 +342,24 @@ export const EmailBuilder: React.FC<EmailBuilderProps> = ({
                   </TooltipTrigger>
                   <TooltipContent className="font-medium">
                     View Source
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip
+                  open={openDownloadTooltip}
+                  onOpenChange={setOpenDownloadTooltip}
+                >
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleDownloadHTML}
+                    >
+                      <Download className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="font-medium">
+                    {downloaded ? "Downloaded!" : "Download HTML"}
                   </TooltipContent>
                 </Tooltip>
 
