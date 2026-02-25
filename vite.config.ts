@@ -12,6 +12,18 @@ export default defineConfig(({ mode }) => ({
       allow: [".", "./client", "./shared", "./node_modules"],
       deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "server/**"],
     },
+    watch: {
+      usePolling: false,
+      interval: 1000,
+      batchDelay: 100,
+      ignored: ["**/node_modules/**", "**/.git/**", "**/dist/**"],
+    },
+    hmr: {
+      protocol: "ws",
+      host: "localhost",
+      port: 8080,
+      timeout: 60000,
+    },
   },
   build: {
     outDir: "dist/spa",
