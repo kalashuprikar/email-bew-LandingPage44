@@ -185,6 +185,10 @@ export const EmailBuilder: React.FC<EmailBuilderProps> = ({
     setTemplate(updated);
     saveTemplateToLocalStorage(updated);
     setShowSaveDialog(false);
+    // Redirect back to templates list after saving
+    if (onBack) {
+      setTimeout(() => onBack(), 250);
+    }
   };
 
   const handleUndo = useCallback(() => {
