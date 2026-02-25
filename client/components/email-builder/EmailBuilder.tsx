@@ -207,6 +207,15 @@ export const EmailBuilder: React.FC<EmailBuilderProps> = ({
     }
   }, [undoStack, redoStack, template]);
 
+  const handleBlockSelect = useCallback((id: string | null) => {
+    setSelectedBlockId(id);
+    setSelectedSubElementId(null);
+  }, []);
+
+  const handleSubElementSelect = useCallback((id: string | null) => {
+    setSelectedSubElementId(id);
+  }, []);
+
   const handleSetTemplateBlocks = useCallback((blocks: ContentBlock[]) => {
     setTemplate((prev) => ({
       ...prev,
@@ -385,11 +394,8 @@ export const EmailBuilder: React.FC<EmailBuilderProps> = ({
                   selectedFooterElement={selectedFooterElement}
                   onAddBlock={handleAddBlock}
                   onBlockUpdate={handleUpdateBlock}
-                  onBlockSelect={(id) => {
-                    setSelectedBlockId(id);
-                    setSelectedSubElementId(null);
-                  }}
-                  onSubElementSelect={setSelectedSubElementId}
+                  onBlockSelect={handleBlockSelect}
+                  onSubElementSelect={handleSubElementSelect}
                   onEditingBlockChange={setEditingBlockId}
                   onFooterElementSelect={setSelectedFooterElement}
                   onTemplateSubjectChange={setTemplateSubject}
