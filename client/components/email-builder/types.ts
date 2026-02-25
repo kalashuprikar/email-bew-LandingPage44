@@ -28,6 +28,8 @@ export interface TitleBlock {
   backgroundColor: string;
   backgroundImage?: string;
   alignment: "left" | "center" | "right";
+  textAlignment?: "left" | "center" | "right" | "justify";
+  lineHeight?: number;
   fontWeight: "normal" | "bold";
   width: number;
   height?: number;
@@ -38,6 +40,7 @@ export interface TitleBlock {
   borderColor: string;
   borderRadius: number;
   visibility: "all" | "desktop" | "mobile";
+  displayConditions?: any[];
 }
 
 export interface TextBlock {
@@ -49,6 +52,8 @@ export interface TextBlock {
   backgroundColor: string;
   backgroundImage?: string;
   alignment: "left" | "center" | "right";
+  textAlignment?: "left" | "center" | "right" | "justify";
+  lineHeight?: number;
   fontWeight: "normal" | "bold";
   fontStyle: "normal" | "italic";
   width: number;
@@ -60,6 +65,7 @@ export interface TextBlock {
   borderColor: string;
   borderRadius: number;
   visibility: "all" | "desktop" | "mobile";
+  displayConditions?: any[];
 }
 
 export interface ImageBlock {

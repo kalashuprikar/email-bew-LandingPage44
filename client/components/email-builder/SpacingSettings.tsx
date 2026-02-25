@@ -23,16 +23,23 @@ export const SpacingSettings: React.FC<SpacingSettingsProps> = ({
   onChange,
   tooltip,
 }) => {
-  const [isGrouped, setIsGrouped] = React.useState(false);
+  const [isGrouped, setIsGrouped] = React.useState(true);
 
   const handleChange = (side: keyof typeof values, value: number) => {
     if (isGrouped) {
-      onChange({
-        top: value,
-        right: value,
-        bottom: value,
-        left: value,
-      });
+      if (side === "top" || side === "bottom") {
+        onChange({
+          ...values,
+          top: value,
+          bottom: value,
+        });
+      } else {
+        onChange({
+          ...values,
+          left: value,
+          right: value,
+        });
+      }
     } else {
       onChange({
         ...values,
@@ -67,131 +74,205 @@ export const SpacingSettings: React.FC<SpacingSettingsProps> = ({
             id={`group-${label}`}
             checked={isGrouped}
             onCheckedChange={(checked) => setIsGrouped(!!checked)}
-            className="w-3.5 h-3.5"
+            className="w-3.5 h-3.5 data-[state=checked]:bg-indigo-600 data-[state=checked]:border-indigo-600"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-x-4 gap-y-3">
-        {/* Top */}
-        <div className="flex items-center gap-2 bg-gray-50/50 rounded-md px-2 py-1.5 border border-gray-100">
-          <PanelTop className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
-          <div className="flex items-center flex-1">
-            <input
-              type="number"
-              value={values.top}
-              onChange={(e) => handleChange("top", parseInt(e.target.value) || 0)}
-              className="w-full bg-transparent text-xs focus:outline-none"
-            />
-            <span className="text-[10px] text-gray-400 ml-1">px</span>
-          </div>
-          <div className="flex flex-col gap-0.5">
-            <button
-              type="button"
-              onClick={() => handleChange("top", values.top + 1)}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 3L3 1L5 3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleChange("top", Math.max(0, values.top - 1))}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 1L3 3L5 1" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
-          </div>
-        </div>
+        {isGrouped ? (
+          <>
+            {/* Vertical */}
+            <div className="flex items-center gap-2 bg-gray-50/50 rounded-md px-2 py-1.5 border border-gray-100">
+              <div className="w-3.5 h-3.5 text-gray-400 flex-shrink-0 flex flex-col justify-between items-center py-0.5">
+                <div className="w-2.5 h-[1.5px] bg-current opacity-60" />
+                <div className="w-3 h-1.5 border border-current rounded-[1px]" />
+                <div className="w-2.5 h-[1.5px] bg-current opacity-60" />
+              </div>
+              <div className="flex items-center flex-1">
+                <input
+                  type="number"
+                  value={values.top}
+                  onChange={(e) => handleChange("top", parseInt(e.target.value) || 0)}
+                  className="w-full bg-transparent text-xs focus:outline-none"
+                />
+                <span className="text-[10px] text-gray-400 ml-1">px</span>
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <button
+                  type="button"
+                  onClick={() => handleChange("top", values.top + 1)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 3L3 1L5 3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleChange("top", Math.max(0, values.top - 1))}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 1L3 3L5 1" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
 
-        {/* Bottom */}
-        <div className="flex items-center gap-2 bg-gray-50/50 rounded-md px-2 py-1.5 border border-gray-100">
-          <PanelBottom className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
-          <div className="flex items-center flex-1">
-            <input
-              type="number"
-              value={values.bottom}
-              onChange={(e) => handleChange("bottom", parseInt(e.target.value) || 0)}
-              className="w-full bg-transparent text-xs focus:outline-none"
-            />
-            <span className="text-[10px] text-gray-400 ml-1">px</span>
-          </div>
-          <div className="flex flex-col gap-0.5">
-            <button
-              type="button"
-              onClick={() => handleChange("bottom", values.bottom + 1)}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 3L3 1L5 3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleChange("bottom", Math.max(0, values.bottom - 1))}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 1L3 3L5 1" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
-          </div>
-        </div>
+            {/* Horizontal */}
+            <div className="flex items-center gap-2 bg-gray-50/50 rounded-md px-2 py-1.5 border border-gray-100">
+              <div className="w-3.5 h-3.5 text-gray-400 flex-shrink-0 flex justify-between items-center px-0.5">
+                <div className="h-2.5 w-[1.5px] bg-current opacity-60" />
+                <div className="h-3 w-1.5 border border-current rounded-[1px]" />
+                <div className="h-2.5 w-[1.5px] bg-current opacity-60" />
+              </div>
+              <div className="flex items-center flex-1">
+                <input
+                  type="number"
+                  value={values.left}
+                  onChange={(e) => handleChange("left", parseInt(e.target.value) || 0)}
+                  className="w-full bg-transparent text-xs focus:outline-none"
+                />
+                <span className="text-[10px] text-gray-400 ml-1">px</span>
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <button
+                  type="button"
+                  onClick={() => handleChange("left", values.left + 1)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 3L3 1L5 3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleChange("left", Math.max(0, values.left - 1))}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 1L3 3L5 1" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Top */}
+            <div className="flex items-center gap-2 bg-gray-50/50 rounded-md px-2 py-1.5 border border-gray-100">
+              <PanelTop className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
+              <div className="flex items-center flex-1">
+                <input
+                  type="number"
+                  value={values.top}
+                  onChange={(e) => handleChange("top", parseInt(e.target.value) || 0)}
+                  className="w-full bg-transparent text-xs focus:outline-none"
+                />
+                <span className="text-[10px] text-gray-400 ml-1">px</span>
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <button
+                  type="button"
+                  onClick={() => handleChange("top", values.top + 1)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 3L3 1L5 3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleChange("top", Math.max(0, values.top - 1))}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 1L3 3L5 1" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
 
-        {/* Left */}
-        <div className="flex items-center gap-2 bg-gray-50/50 rounded-md px-2 py-1.5 border border-gray-100">
-          <PanelLeft className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
-          <div className="flex items-center flex-1">
-            <input
-              type="number"
-              value={values.left}
-              onChange={(e) => handleChange("left", parseInt(e.target.value) || 0)}
-              className="w-full bg-transparent text-xs focus:outline-none"
-            />
-            <span className="text-[10px] text-gray-400 ml-1">px</span>
-          </div>
-          <div className="flex flex-col gap-0.5">
-            <button
-              type="button"
-              onClick={() => handleChange("left", values.left + 1)}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 3L3 1L5 3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleChange("left", Math.max(0, values.left - 1))}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 1L3 3L5 1" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
-          </div>
-        </div>
+            {/* Bottom */}
+            <div className="flex items-center gap-2 bg-gray-50/50 rounded-md px-2 py-1.5 border border-gray-100">
+              <PanelBottom className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
+              <div className="flex items-center flex-1">
+                <input
+                  type="number"
+                  value={values.bottom}
+                  onChange={(e) => handleChange("bottom", parseInt(e.target.value) || 0)}
+                  className="w-full bg-transparent text-xs focus:outline-none"
+                />
+                <span className="text-[10px] text-gray-400 ml-1">px</span>
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <button
+                  type="button"
+                  onClick={() => handleChange("bottom", values.bottom + 1)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 3L3 1L5 3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleChange("bottom", Math.max(0, values.bottom - 1))}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 1L3 3L5 1" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
 
-        {/* Right */}
-        <div className="flex items-center gap-2 bg-gray-50/50 rounded-md px-2 py-1.5 border border-gray-100">
-          <PanelRight className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
-          <div className="flex items-center flex-1">
-            <input
-              type="number"
-              value={values.right}
-              onChange={(e) => handleChange("right", parseInt(e.target.value) || 0)}
-              className="w-full bg-transparent text-xs focus:outline-none"
-            />
-            <span className="text-[10px] text-gray-400 ml-1">px</span>
-          </div>
-          <div className="flex flex-col gap-0.5">
-            <button
-              type="button"
-              onClick={() => handleChange("right", values.right + 1)}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 3L3 1L5 3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleChange("right", Math.max(0, values.right - 1))}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 1L3 3L5 1" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
-          </div>
-        </div>
+            {/* Left */}
+            <div className="flex items-center gap-2 bg-gray-50/50 rounded-md px-2 py-1.5 border border-gray-100">
+              <PanelLeft className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
+              <div className="flex items-center flex-1">
+                <input
+                  type="number"
+                  value={values.left}
+                  onChange={(e) => handleChange("left", parseInt(e.target.value) || 0)}
+                  className="w-full bg-transparent text-xs focus:outline-none"
+                />
+                <span className="text-[10px] text-gray-400 ml-1">px</span>
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <button
+                  type="button"
+                  onClick={() => handleChange("left", values.left + 1)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 3L3 1L5 3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleChange("left", Math.max(0, values.left - 1))}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 1L3 3L5 1" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Right */}
+            <div className="flex items-center gap-2 bg-gray-50/50 rounded-md px-2 py-1.5 border border-gray-100">
+              <PanelRight className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
+              <div className="flex items-center flex-1">
+                <input
+                  type="number"
+                  value={values.right}
+                  onChange={(e) => handleChange("right", parseInt(e.target.value) || 0)}
+                  className="w-full bg-transparent text-xs focus:outline-none"
+                />
+                <span className="text-[10px] text-gray-400 ml-1">px</span>
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <button
+                  type="button"
+                  onClick={() => handleChange("right", values.right + 1)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 3L3 1L5 3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleChange("right", Math.max(0, values.right - 1))}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg width="6" height="4" viewBox="0 0 6 4" fill="none"><path d="M1 1L3 3L5 1" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

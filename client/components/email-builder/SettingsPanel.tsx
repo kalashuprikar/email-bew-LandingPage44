@@ -4,11 +4,386 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Trash2, X, Copy, Plus, ChevronLeft } from "lucide-react";
+import {
+  Trash2, X, Copy, Plus, ChevronLeft,
+  AlignLeft, AlignCenter, AlignRight, AlignJustify,
+  Type, Image as ImageIcon, HelpCircle,
+  Monitor, Smartphone, Tablet,
+  ArrowUp, ArrowDown, Baseline
+} from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { SocialLinksEditor } from "./SocialLinksEditor";
 import { FooterSocialLinksEditor } from "./FooterSocialLinksEditor";
 import { generateId } from "./utils";
 import { SpacingSettings } from "./SpacingSettings";
+import { cn } from "@/lib/utils";
+
+interface UniversalStyleSettingsProps {
+  block: any;
+  onBlockUpdate: (block: any) => void;
+}
+
+const UniversalStyleSettings: React.FC<UniversalStyleSettingsProps> = ({
+  block,
+  onBlockUpdate,
+}) => {
+  return (
+    <div className="space-y-6 pt-4 border-t border-gray-100 mt-6">
+      {/* Layout Section */}
+      <div>
+        <h4 className="text-xs font-bold text-gray-900 mb-4">Layout</h4>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Label className="text-xs text-gray-700">Width</Label>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center bg-gray-50 border border-gray-200 rounded px-2 py-1">
+                <input
+                  type="number"
+                  value={block.width || 100}
+                  onChange={(e) => onBlockUpdate({ ...block, width: parseInt(e.target.value) || 0 })}
+                  className="w-12 bg-transparent text-xs focus:outline-none"
+                />
+                <div className="flex flex-col ml-1 border-l border-gray-200 pl-1">
+                  <button onClick={() => onBlockUpdate({ ...block, width: (block.width || 0) + 1 })} className="text-[8px] hover:text-indigo-600"><ArrowUp className="w-2 h-2" /></button>
+                  <button onClick={() => onBlockUpdate({ ...block, width: Math.max(0, (block.width || 0) - 1) })} className="text-[8px] hover:text-indigo-600"><ArrowDown className="w-2 h-2" /></button>
+                </div>
+              </div>
+              <select
+                value={block.widthUnit || "%"}
+                onChange={(e) => onBlockUpdate({ ...block, widthUnit: e.target.value })}
+                className="text-xs bg-gray-50 border border-gray-200 rounded px-1 py-1 focus:outline-none"
+              >
+                <option value="%">%</option>
+                <option value="px">px</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1">
+              <Label className="text-xs text-gray-700">Block Alignment</Label>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="w-3 h-3 text-gray-400 cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent>Align the block within its container</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            <div className="flex bg-gray-50 border border-gray-200 rounded p-0.5">
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn("h-7 px-2 rounded-sm", block.alignment === "left" && "bg-white shadow-sm")}
+                onClick={() => onBlockUpdate({ ...block, alignment: "left" })}
+              >
+                <AlignLeft className="w-3.5 h-3.5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn("h-7 px-2 rounded-sm", block.alignment === "center" && "bg-white shadow-sm")}
+                onClick={() => onBlockUpdate({ ...block, alignment: "center" })}
+              >
+                <AlignCenter className="w-3.5 h-3.5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn("h-7 px-2 rounded-sm", block.alignment === "right" && "bg-white shadow-sm")}
+                onClick={() => onBlockUpdate({ ...block, alignment: "right" })}
+              >
+                <AlignRight className="w-3.5 h-3.5" />
+              </Button>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <Label className="text-xs text-gray-700">Text Alignment</Label>
+            <div className="flex bg-gray-50 border border-gray-200 rounded p-0.5">
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn("h-7 px-2 rounded-sm", (block.textAlignment || block.alignment) === "left" && "bg-white shadow-sm")}
+                onClick={() => onBlockUpdate({ ...block, textAlignment: "left" })}
+              >
+                <AlignLeft className="w-3.5 h-3.5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn("h-7 px-2 rounded-sm", (block.textAlignment || block.alignment) === "center" && "bg-white shadow-sm")}
+                onClick={() => onBlockUpdate({ ...block, textAlignment: "center" })}
+              >
+                <AlignCenter className="w-3.5 h-3.5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn("h-7 px-2 rounded-sm", (block.textAlignment || block.alignment) === "right" && "bg-white shadow-sm")}
+                onClick={() => onBlockUpdate({ ...block, textAlignment: "right" })}
+              >
+                <AlignRight className="w-3.5 h-3.5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn("h-7 px-2 rounded-sm", block.textAlignment === "justify" && "bg-white shadow-sm")}
+                onClick={() => onBlockUpdate({ ...block, textAlignment: "justify" })}
+              >
+                <AlignJustify className="w-3.5 h-3.5" />
+              </Button>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <Label className="text-xs text-gray-700">Line height</Label>
+            <div className="flex bg-gray-50 border border-gray-200 rounded p-0.5">
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn("h-7 px-2 rounded-sm", block.lineHeight === 1 && "bg-white shadow-sm")}
+                onClick={() => onBlockUpdate({ ...block, lineHeight: 1 })}
+              >
+                <div className="flex flex-col gap-[1px]"><div className="w-3 h-[1px] bg-current"></div><div className="w-3 h-[1px] bg-current"></div><div className="w-3 h-[1px] bg-current"></div></div>
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn("h-7 px-2 rounded-sm", (block.lineHeight === 1.2 || !block.lineHeight) && "bg-white shadow-sm")}
+                onClick={() => onBlockUpdate({ ...block, lineHeight: 1.2 })}
+              >
+                <div className="flex flex-col gap-[2px]"><div className="w-3 h-[1px] bg-current"></div><div className="w-3 h-[1px] bg-current"></div><div className="w-3 h-[1px] bg-current"></div></div>
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn("h-7 px-2 rounded-sm", block.lineHeight === 1.5 && "bg-white shadow-sm")}
+                onClick={() => onBlockUpdate({ ...block, lineHeight: 1.5 })}
+              >
+                <div className="flex flex-col gap-[3px]"><div className="w-3 h-[1px] bg-current"></div><div className="w-3 h-[1px] bg-current"></div><div className="w-3 h-[1px] bg-current"></div></div>
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn("h-7 px-2 rounded-sm", block.lineHeight === 2 && "bg-white shadow-sm")}
+                onClick={() => onBlockUpdate({ ...block, lineHeight: 2 })}
+              >
+                <div className="flex flex-col gap-[4px]"><div className="w-3 h-[1px] bg-current"></div><div className="w-3 h-[1px] bg-current"></div><div className="w-3 h-[1px] bg-current"></div></div>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Spacing Section */}
+      <div className="space-y-6">
+        <h4 className="text-xs font-bold text-gray-900">Spacing</h4>
+        <SpacingSettings
+          label="Padding"
+          tooltip="Inner space between content and border"
+          values={{
+            top: block.paddingTop ?? block.padding ?? 0,
+            right: block.paddingRight ?? block.padding ?? 0,
+            bottom: block.paddingBottom ?? block.padding ?? 0,
+            left: block.paddingLeft ?? block.padding ?? 0,
+          }}
+          onChange={(v) =>
+            onBlockUpdate({
+              ...block,
+              paddingTop: v.top,
+              paddingRight: v.right,
+              paddingBottom: v.bottom,
+              paddingLeft: v.left,
+              padding: undefined, // Clear legacy single property
+            })
+          }
+        />
+
+        <SpacingSettings
+          label="Margin"
+          tooltip="Outer space around the block"
+          values={{
+            top: block.marginTop ?? block.margin ?? 0,
+            right: block.marginRight ?? block.margin ?? 0,
+            bottom: block.marginBottom ?? block.margin ?? 0,
+            left: block.marginLeft ?? block.margin ?? 0,
+          }}
+          onChange={(v) =>
+            onBlockUpdate({
+              ...block,
+              marginTop: v.top,
+              marginRight: v.right,
+              marginBottom: v.bottom,
+              marginLeft: v.left,
+              margin: undefined, // Clear legacy single property
+            })
+          }
+        />
+      </div>
+
+      {/* Background Section */}
+      <div>
+        <h4 className="text-xs font-bold text-gray-900 mb-4">Background</h4>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Label className="text-xs text-gray-700">Color</Label>
+            <div className="flex items-center gap-2">
+              <input
+                type="color"
+                value={block.backgroundColor || "#ffffff"}
+                onChange={(e) => onBlockUpdate({ ...block, backgroundColor: e.target.value })}
+                className="w-6 h-6 rounded-full border border-gray-200 cursor-pointer overflow-hidden p-0"
+              />
+              <span className="text-[10px] text-gray-400 font-mono uppercase">{block.backgroundColor || "#ffffff"}</span>
+            </div>
+          </div>
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <Label className="text-xs text-gray-700">Image</Label>
+              <Button variant="outline" size="sm" className="h-7 text-[10px]" onClick={() => document.getElementById('bg-image-upload')?.click()}>
+                Add image
+              </Button>
+              <input type="file" id="bg-image-upload" className="hidden" accept="image/*" onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = (ev) => onBlockUpdate({ ...block, backgroundImage: ev.target?.result as string });
+                  reader.readAsDataURL(file);
+                }
+              }} />
+            </div>
+            <div className="relative">
+              <Label className="text-[10px] text-gray-500 mb-1 block">Image URL:</Label>
+              <div className="flex gap-1">
+                <Input
+                  value={block.backgroundImage || ""}
+                  onChange={(e) => onBlockUpdate({ ...block, backgroundImage: e.target.value })}
+                  placeholder="https://..."
+                  className="h-8 text-xs focus:ring-valasys-orange focus:ring-2"
+                />
+                <Button variant="outline" size="sm" className="h-8 w-8 p-0" onClick={() => onBlockUpdate({ ...block, backgroundImage: "" })}>
+                  <X className="w-3 h-3" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Rounded Corners Section */}
+      <div>
+        <h4 className="text-xs font-bold text-gray-900 mb-4">Rounded corners</h4>
+        <div className="flex items-center justify-between">
+          <Label className="text-xs text-gray-700">Radius</Label>
+          <div className="flex items-center bg-gray-50 border border-gray-200 rounded px-2 py-1">
+            <input
+              type="number"
+              value={block.borderRadius || 0}
+              onChange={(e) => onBlockUpdate({ ...block, borderRadius: parseInt(e.target.value) || 0 })}
+              className="w-10 bg-transparent text-xs focus:outline-none"
+            />
+            <span className="text-[10px] text-gray-400 ml-1">px</span>
+            <div className="flex flex-col ml-1 border-l border-gray-200 pl-1">
+              <button onClick={() => onBlockUpdate({ ...block, borderRadius: (block.borderRadius || 0) + 1 })} className="text-[8px] hover:text-indigo-600"><ArrowUp className="w-2 h-2" /></button>
+              <button onClick={() => onBlockUpdate({ ...block, borderRadius: Math.max(0, (block.borderRadius || 0) - 1) })} className="text-[8px] hover:text-indigo-600"><ArrowDown className="w-2 h-2" /></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Borders Section */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="text-xs font-bold text-gray-900">Borders</h4>
+          <div className="flex items-center gap-2">
+            <Label className="text-[10px] text-gray-500">Apply to all sides</Label>
+            <Checkbox checked={true} className="w-3.5 h-3.5" />
+          </div>
+        </div>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Label className="text-xs text-gray-700">Size</Label>
+            <div className="flex items-center bg-gray-50 border border-gray-200 rounded px-2 py-1">
+              <input
+                type="number"
+                value={block.borderWidth || 0}
+                onChange={(e) => onBlockUpdate({ ...block, borderWidth: parseInt(e.target.value) || 0 })}
+                className="w-10 bg-transparent text-xs focus:outline-none"
+              />
+              <span className="text-[10px] text-gray-400 ml-1">px</span>
+              <div className="flex flex-col ml-1 border-l border-gray-200 pl-1">
+                <button onClick={() => onBlockUpdate({ ...block, borderWidth: (block.borderWidth || 0) + 1 })} className="text-[8px] hover:text-indigo-600"><ArrowUp className="w-2 h-2" /></button>
+                <button onClick={() => onBlockUpdate({ ...block, borderWidth: Math.max(0, (block.borderWidth || 0) - 1) })} className="text-[8px] hover:text-indigo-600"><ArrowDown className="w-2 h-2" /></button>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <Label className="text-xs text-gray-700">Color</Label>
+            <input
+              type="color"
+              value={block.borderColor || "#000000"}
+              onChange={(e) => onBlockUpdate({ ...block, borderColor: e.target.value })}
+              className="w-6 h-6 rounded-full border border-gray-200 cursor-pointer overflow-hidden p-0"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Content Visibility Section */}
+      <div>
+        <h4 className="text-xs font-bold text-gray-900 mb-4">Content visibility</h4>
+        <p className="text-[10px] text-gray-500 mb-4 leading-relaxed">
+          Display or hide content based on the type of device or other specific conditions.
+        </p>
+        <div className="space-y-4">
+          <div>
+            <Label className="text-xs text-gray-700 mb-2 block">Show on:</Label>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className={cn("h-8 text-[10px] gap-1.5 px-2.5", block.visibility === "all" && "bg-indigo-50 border-indigo-200 text-indigo-700 hover:bg-indigo-50 hover:text-indigo-700")}
+                onClick={() => onBlockUpdate({ ...block, visibility: "all" })}
+              >
+                <Monitor className="w-3.5 h-3.5" />
+                All devices
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className={cn("h-8 text-[10px] gap-1.5 px-2.5", block.visibility === "desktop" && "bg-indigo-50 border-indigo-200 text-indigo-700 hover:bg-indigo-50 hover:text-indigo-700")}
+                onClick={() => onBlockUpdate({ ...block, visibility: "desktop" })}
+              >
+                <Laptop className="w-3.5 h-3.5" />
+                Only on desktop
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className={cn("h-8 text-[10px] gap-1.5 px-2.5", block.visibility === "mobile" && "bg-indigo-50 border-indigo-200 text-indigo-700 hover:bg-indigo-50 hover:text-indigo-700")}
+                onClick={() => onBlockUpdate({ ...block, visibility: "mobile" })}
+              >
+                <Smartphone className="w-3.5 h-3.5" />
+                Only on mobile
+              </Button>
+            </div>
+          </div>
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <Label className="text-xs text-gray-700">Display conditions</Label>
+              <Button variant="outline" size="sm" className="h-7 text-[10px] gap-1 px-2.5">
+                <Plus className="w-3 h-3" />
+                Add condition
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 interface SettingsPanelProps {
   block: ContentBlock | null;
@@ -197,546 +572,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             </div>
 
             <div>
-              <h4 className="text-xs font-bold text-gray-900 mb-3">Layout</h4>
-              <div className="space-y-3">
-                <div>
-                  <Label
-                    htmlFor="titleWidth"
-                    className="text-xs text-gray-700 mb-1 block"
-                  >
-                    Width
-                  </Label>
-                  <div className="flex gap-2">
-                    <Input
-                      id="titleWidth"
-                      type="text"
-                      inputMode="numeric"
-                      value={titleWidthInput}
-                      onChange={(e) => {
-                        const inputValue = e.target.value;
-                        const numericValue = inputValue.replace(/[^\d]/g, "");
-
-                        setTitleWidthInput(inputValue);
-
-                        if (numericValue !== "") {
-                          const num = parseInt(numericValue);
-                          const maxValue = block.widthUnit === "%" ? 100 : 1000;
-                          if (num >= 1 && num <= maxValue) {
-                            onBlockUpdate({
-                              ...block,
-                              width: num,
-                            });
-                          }
-                        }
-                      }}
-                      onBlur={(e) => {
-                        const inputValue = e.target.value;
-                        const numericValue = inputValue.replace(/[^\d]/g, "");
-                        if (numericValue === "") {
-                          onBlockUpdate({
-                            ...block,
-                            width: 100,
-                          });
-                          setTitleWidthInput("100");
-                        } else {
-                          const num = parseInt(numericValue);
-                          const maxValue = block.widthUnit === "%" ? 100 : 1000;
-                          if (num > maxValue) {
-                            onBlockUpdate({
-                              ...block,
-                              width: maxValue,
-                            });
-                            setTitleWidthInput(String(maxValue));
-                          } else if (num < 1) {
-                            onBlockUpdate({
-                              ...block,
-                              width: 1,
-                            });
-                            setTitleWidthInput("1");
-                          }
-                        }
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === "ArrowUp") {
-                          e.preventDefault();
-                          const currentWidth = parseInt(titleWidthInput) || 100;
-                          const maxValue = block.widthUnit === "%" ? 100 : 1000;
-                          const newWidth = Math.min(currentWidth + 1, maxValue);
-                          onBlockUpdate({
-                            ...block,
-                            width: newWidth,
-                          });
-                          setTitleWidthInput(String(newWidth));
-                        } else if (e.key === "ArrowDown") {
-                          e.preventDefault();
-                          const currentWidth = parseInt(titleWidthInput) || 100;
-                          const newWidth = Math.max(1, currentWidth - 1);
-                          onBlockUpdate({
-                            ...block,
-                            width: newWidth,
-                          });
-                          setTitleWidthInput(String(newWidth));
-                        }
-                      }}
-                      className="flex-1 focus:ring-valasys-orange focus:ring-2"
-                    />
-                    <select
-                      value={block.widthUnit}
-                      onChange={(e) =>
-                        onBlockUpdate({
-                          ...block,
-                          widthUnit: e.target.value as "px" | "%",
-                        })
-                      }
-                      className="px-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-valasys-orange"
-                    >
-                      <option value="%">%</option>
-                      <option value="px">px</option>
-                    </select>
-                  </div>
-                  <Button type="button"
-                    variant="outline"
-                    size="sm"
-                    className="w-full text-xs mt-2"
-                    onClick={() => {
-                      onBlockUpdate({
-                        ...block,
-                        width: 100,
-                        widthUnit: "%",
-                      });
-                      setTitleWidthInput("100");
-                    }}
-                  >
-                    Full Width (100%)
-                  </Button>
-                </div>
-
-                <div>
-                  <Label
-                    htmlFor="titleAlignment"
-                    className="text-xs text-gray-700 mb-1 block"
-                  >
-                    Block Alignment
-                  </Label>
-                  <div className="flex gap-2">
-                    <Button type="button"
-                      variant={
-                        block.alignment === "left" ? "default" : "outline"
-                      }
-                      size="sm"
-                      className="flex-1"
-                      onClick={() =>
-                        onBlockUpdate({ ...block, alignment: "left" })
-                      }
-                    >
-                      ⬅
-                    </Button>
-                    <Button type="button"
-                      variant={
-                        block.alignment === "center" ? "default" : "outline"
-                      }
-                      size="sm"
-                      className="flex-1"
-                      onClick={() =>
-                        onBlockUpdate({ ...block, alignment: "center" })
-                      }
-                    >
-                      ⬇
-                    </Button>
-                    <Button type="button"
-                      variant={
-                        block.alignment === "right" ? "default" : "outline"
-                      }
-                      size="sm"
-                      className="flex-1"
-                      onClick={() =>
-                        onBlockUpdate({ ...block, alignment: "right" })
-                      }
-                    >
-                      ➡
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="text-xs font-bold text-gray-900">Spacing</h4>
-              </div>
-              <div className="space-y-3">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <Label className="text-xs text-gray-700">Padding</Label>
-                    <div className="flex items-center gap-2">
-                      <Checkbox
-                        id="groupPadding"
-                        checked={groupPaddingSides}
-                        onCheckedChange={(checked) =>
-                          setGroupPaddingSides(checked as boolean)
-                        }
-                      />
-                      <Label
-                        htmlFor="groupPadding"
-                        className="text-xs text-gray-600 cursor-pointer"
-                      >
-                        Group sides
-                      </Label>
-                    </div>
-                  </div>
-                  {groupPaddingSides ? (
-                    <div className="flex gap-2">
-                      <Input
-                        type="number"
-                        min="0"
-                        value={paddingTop}
-                        onChange={(e) =>
-                          handlePaddingChange(parseInt(e.target.value))
-                        }
-                        className="flex-1 focus:ring-valasys-orange focus:ring-2"
-                      />
-                      <span className="px-2 py-1 text-sm text-gray-600">
-                        px
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs text-gray-600 w-6 text-center">
-                          ↑
-                        </span>
-                        <Input
-                          type="number"
-                          min="0"
-                          value={paddingTop}
-                          onChange={(e) =>
-                            handlePaddingChange(parseInt(e.target.value), "top")
-                          }
-                          className="flex-1 focus:ring-valasys-orange focus:ring-2"
-                        />
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs text-gray-600 w-6 text-center">
-                          →
-                        </span>
-                        <Input
-                          type="number"
-                          min="0"
-                          value={paddingRight}
-                          onChange={(e) =>
-                            handlePaddingChange(
-                              parseInt(e.target.value),
-                              "right",
-                            )
-                          }
-                          className="flex-1 focus:ring-valasys-orange focus:ring-2"
-                        />
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs text-gray-600 w-6 text-center">
-                          ↓
-                        </span>
-                        <Input
-                          type="number"
-                          min="0"
-                          value={paddingBottom}
-                          onChange={(e) =>
-                            handlePaddingChange(
-                              parseInt(e.target.value),
-                              "bottom",
-                            )
-                          }
-                          className="flex-1 focus:ring-valasys-orange focus:ring-2"
-                        />
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs text-gray-600 w-6 text-center">
-                          ←
-                        </span>
-                        <Input
-                          type="number"
-                          min="0"
-                          value={paddingLeft}
-                          onChange={(e) =>
-                            handlePaddingChange(
-                              parseInt(e.target.value),
-                              "left",
-                            )
-                          }
-                          className="flex-1 focus:ring-valasys-orange focus:ring-2"
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <Label className="text-xs text-gray-700">Margin</Label>
-                    <div className="flex items-center gap-2">
-                      <Checkbox
-                        id="groupMargin"
-                        checked={groupMarginSides}
-                        onCheckedChange={(checked) =>
-                          setGroupMarginSides(checked as boolean)
-                        }
-                      />
-                      <Label
-                        htmlFor="groupMargin"
-                        className="text-xs text-gray-600 cursor-pointer"
-                      >
-                        Group sides
-                      </Label>
-                    </div>
-                  </div>
-                  {groupMarginSides ? (
-                    <div className="flex gap-2">
-                      <Input
-                        type="number"
-                        min="0"
-                        value={marginTop}
-                        onChange={(e) =>
-                          handleMarginChange(parseInt(e.target.value))
-                        }
-                        className="flex-1 focus:ring-valasys-orange focus:ring-2"
-                      />
-                      <span className="px-2 py-1 text-sm text-gray-600">
-                        px
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs text-gray-600 w-6 text-center">
-                          ↑
-                        </span>
-                        <Input
-                          type="number"
-                          min="0"
-                          value={marginTop}
-                          onChange={(e) =>
-                            handleMarginChange(parseInt(e.target.value), "top")
-                          }
-                          className="flex-1 focus:ring-valasys-orange focus:ring-2"
-                        />
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs text-gray-600 w-6 text-center">
-                          →
-                        </span>
-                        <Input
-                          type="number"
-                          min="0"
-                          value={marginRight}
-                          onChange={(e) =>
-                            handleMarginChange(
-                              parseInt(e.target.value),
-                              "right",
-                            )
-                          }
-                          className="flex-1 focus:ring-valasys-orange focus:ring-2"
-                        />
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs text-gray-600 w-6 text-center">
-                          ↓
-                        </span>
-                        <Input
-                          type="number"
-                          min="0"
-                          value={marginBottom}
-                          onChange={(e) =>
-                            handleMarginChange(
-                              parseInt(e.target.value),
-                              "bottom",
-                            )
-                          }
-                          className="flex-1 focus:ring-valasys-orange focus:ring-2"
-                        />
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs text-gray-600 w-6 text-center">
-                          ←
-                        </span>
-                        <Input
-                          type="number"
-                          min="0"
-                          value={marginLeft}
-                          onChange={(e) =>
-                            handleMarginChange(parseInt(e.target.value), "left")
-                          }
-                          className="flex-1 focus:ring-valasys-orange focus:ring-2"
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-xs font-bold text-gray-900 mb-3">
-                Background
-              </h4>
-              <div className="space-y-3">
-                <div>
-                  <Label className="text-xs text-gray-700 mb-1 block">
-                    Color
-                  </Label>
-                  <Input
-                    type="color"
-                    value={block.backgroundColor}
-                    onChange={(e) =>
-                      onBlockUpdate({
-                        ...block,
-                        backgroundColor: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs text-gray-700 mb-2 block">
-                    Image
-                  </Label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    id="bgImageUpload"
-                    className="hidden"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onload = (event) => {
-                          onBlockUpdate({
-                            ...block,
-                            backgroundImage: event.target?.result as string,
-                          });
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
-                  <Button type="button"
-                    variant="outline"
-                    size="sm"
-                    className="w-full text-xs"
-                    onClick={() =>
-                      document.getElementById("bgImageUpload")?.click()
-                    }
-                  >
-                    Add image
-                  </Button>
-                </div>
-                <div>
-                  <Label className="text-xs text-gray-700 mb-1 block">
-                    Image URL
-                  </Label>
-                  <Input
-                    type="text"
-                    placeholder="https://example.com/image.jpg"
-                    value={(block as any).backgroundImage || ""}
-                    onChange={(e) =>
-                      onBlockUpdate({
-                        ...block,
-                        backgroundImage: e.target.value,
-                      })
-                    }
-                    className="focus:ring-valasys-orange focus:ring-2"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-xs font-bold text-gray-900 mb-3">
-                Rounded corners
-              </h4>
-              <div className="space-y-3">
-                <div>
-                  <Label
-                    htmlFor="titleRadius"
-                    className="text-xs text-gray-700 mb-1 block"
-                  >
-                    Radius
-                  </Label>
-                  <div className="flex gap-2">
-                    <Input
-                      id="titleRadius"
-                      type="number"
-                      min="0"
-                      value={block.borderRadius || 0}
-                      onChange={(e) =>
-                        onBlockUpdate({
-                          ...block,
-                          borderRadius: parseInt(e.target.value) || 0,
-                        })
-                      }
-                      className="flex-1 focus:ring-valasys-orange focus:ring-2"
-                    />
-                    <span className="px-2 py-1 text-sm text-gray-600">px</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="text-xs font-bold text-gray-900">Borders</h4>
-                <div className="flex items-center gap-2">
-                  <Checkbox
-                    id="applyBorder"
-                    checked={applyBorderToAllSides}
-                    onCheckedChange={(checked) =>
-                      setApplyBorderToAllSides(checked as boolean)
-                    }
-                  />
-                  <Label
-                    htmlFor="applyBorder"
-                    className="text-xs text-gray-600 cursor-pointer"
-                  >
-                    Apply to all sides
-                  </Label>
-                </div>
-              </div>
-              <div className="space-y-3">
-                <div>
-                  <Label className="text-xs text-gray-700 mb-1 block">
-                    Size
-                  </Label>
-                  <div className="flex gap-2">
-                    <Input
-                      type="number"
-                      min="0"
-                      value={block.borderWidth || 0}
-                      onChange={(e) =>
-                        onBlockUpdate({
-                          ...block,
-                          borderWidth: parseInt(e.target.value) || 0,
-                        })
-                      }
-                      className="flex-1 focus:ring-valasys-orange focus:ring-2"
-                    />
-                    <span className="px-2 py-1 text-sm text-gray-600">px</span>
-                  </div>
-                </div>
-
-                <div>
-                  <Label className="text-xs text-gray-700 mb-1 block">
-                    Color
-                  </Label>
-                  <Input
-                    type="color"
-                    value={block.borderColor || "#000000"}
-                    onChange={(e) =>
-                      onBlockUpdate({ ...block, borderColor: e.target.value })
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div>
               <h4 className="text-xs font-bold text-gray-900 mb-3">
                 Typography
               </h4>
@@ -803,50 +638,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     }
                   />
                 </div>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-xs font-bold text-gray-900 mb-3">
-                Content visibility
-              </h4>
-              <p className="text-xs text-gray-500 mb-3">
-                Display content based on the type of device or other specific
-                conditions
-              </p>
-              <div className="flex gap-2 flex-wrap">
-                <Button type="button"
-                  variant={block.visibility === "all" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => onBlockUpdate({ ...block, visibility: "all" })}
-                  className="text-xs"
-                >
-                  All devices
-                </Button>
-                <Button type="button"
-                  variant={
-                    block.visibility === "desktop" ? "default" : "outline"
-                  }
-                  size="sm"
-                  onClick={() =>
-                    onBlockUpdate({ ...block, visibility: "desktop" })
-                  }
-                  className="text-xs"
-                >
-                  Only on desktop
-                </Button>
-                <Button type="button"
-                  variant={
-                    block.visibility === "mobile" ? "default" : "outline"
-                  }
-                  size="sm"
-                  onClick={() =>
-                    onBlockUpdate({ ...block, visibility: "mobile" })
-                  }
-                  className="text-xs"
-                >
-                  Only on mobile
-                </Button>
               </div>
             </div>
           </div>
@@ -7665,7 +7456,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           <Trash2 className="w-4 h-4" />
         </Button>
       </div>
-      <div className="space-y-5">{renderSettings()}</div>
+      <div className="space-y-5">
+        {renderSettings()}
+        <UniversalStyleSettings block={block} onBlockUpdate={onBlockUpdate} />
+      </div>
     </div>
   );
 };
