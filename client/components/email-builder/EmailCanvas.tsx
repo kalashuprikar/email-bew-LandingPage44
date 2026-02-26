@@ -97,85 +97,86 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
   }));
 
   return (
-    <div ref={scrollContainerRef} className="flex-1 overflow-y-auto bg-gray-50 overflow-x-hidden flex flex-col items-center">
-      <div
-        className="origin-top transition-all duration-300 py-6"
-        style={{
-          transform: "scale(0.8)",
-          width: "125%",
-          maxWidth: "840px",
-        }}
-      >
-        {/* Template Settings */}
-        <div className="bg-white border border-gray-200 rounded-t-lg p-4 overflow-x-hidden">
-          <div className="grid grid-cols-2 gap-3">
-            <div className="min-w-0">
-              <label
-                htmlFor="subject"
-                className="text-xs font-medium text-gray-700 block"
-              >
-                Subject
-              </label>
+    <div ref={scrollContainerRef} className="flex-1 overflow-y-auto bg-gray-50 flex flex-col items-center py-6 px-4">
+      {/* Template Settings - Keep at 100% zoom for usability */}
+      <div className="w-full max-w-2xl bg-white border border-gray-200 rounded-t-lg p-4 overflow-x-hidden mb-0">
+        <div className="grid grid-cols-2 gap-3">
+          <div className="min-w-0">
+            <label
+              htmlFor="subject"
+              className="text-xs font-medium text-gray-700 block"
+            >
+              Subject
+            </label>
+            <input
+              id="subject"
+              type="text"
+              value={templateSubject}
+              onChange={(e) => onTemplateSubjectChange(e.target.value)}
+              placeholder="Email subject"
+              className="text-sm mt-1 w-full border border-gray-300 rounded px-2 py-2 focus:outline-none focus:ring-2 focus:ring-valasys-orange focus:border-transparent"
+            />
+          </div>
+          <div className="min-w-0">
+            <label
+              htmlFor="bgColor"
+              className="text-xs font-medium text-gray-700 block"
+            >
+              Template Background
+            </label>
+            <div className="flex gap-2 mt-1 min-w-0">
               <input
-                id="subject"
+                id="bgColor"
+                type="color"
+                value={template.backgroundColor}
+                onChange={(e) => onBackgroundColorChange(e.target.value)}
+                className="text-sm w-10 h-10 border border-gray-300 rounded cursor-pointer flex-shrink-0 mr-2"
+              />
+              <input
                 type="text"
-                value={templateSubject}
-                onChange={(e) => onTemplateSubjectChange(e.target.value)}
-                placeholder="Email subject"
-                className="text-sm mt-1 w-full border border-gray-300 rounded px-2 py-2 focus:outline-none focus:ring-2 focus:ring-valasys-orange focus:border-transparent"
+                value={template.backgroundColor}
+                onChange={(e) => onBackgroundColorChange(e.target.value)}
+                className="text-sm border border-gray-300 rounded px-2 py-2 focus:outline-none focus:ring-2 focus:ring-valasys-orange focus:border-transparent flex-1 mr-2"
+                placeholder="#ffffff"
               />
             </div>
-            <div className="min-w-0">
-              <label
-                htmlFor="bgColor"
-                className="text-xs font-medium text-gray-700 block"
-              >
-                Template Background
-              </label>
-              <div className="flex gap-2 mt-1 min-w-0">
-                <input
-                  id="bgColor"
-                  type="color"
-                  value={template.backgroundColor}
-                  onChange={(e) => onBackgroundColorChange(e.target.value)}
-                  className="text-sm w-10 h-10 border border-gray-300 rounded cursor-pointer flex-shrink-0 mr-2"
-                />
-                <input
-                  type="text"
-                  value={template.backgroundColor}
-                  onChange={(e) => onBackgroundColorChange(e.target.value)}
-                  className="text-sm border border-gray-300 rounded px-2 py-2 focus:outline-none focus:ring-2 focus:ring-valasys-orange focus:border-transparent flex-1 mr-2"
-                  placeholder="#ffffff"
-                />
-              </div>
-            </div>
-            <div className="min-w-0 col-span-2">
-              <label
-                htmlFor="docBgColor"
-                className="text-xs font-medium text-gray-700 block"
-              >
-                Document Background
-              </label>
-              <div className="flex gap-2 mt-1 min-w-0">
-                <input
-                  id="docBgColor"
-                  type="color"
-                  value={template.documentBackgroundColor || "#ffffff"}
-                  onChange={(e) => onDocumentBackgroundColorChange?.(e.target.value)}
-                  className="text-sm w-10 h-10 border border-gray-300 rounded cursor-pointer flex-shrink-0 mr-2"
-                />
-                <input
-                  type="text"
-                  value={template.documentBackgroundColor || "#ffffff"}
-                  onChange={(e) => onDocumentBackgroundColorChange?.(e.target.value)}
-                  className="text-sm border border-gray-300 rounded px-2 py-2 focus:outline-none focus:ring-2 focus:ring-valasys-orange focus:border-transparent flex-1 mr-2"
-                  placeholder="#ffffff"
-                />
-              </div>
+          </div>
+          <div className="min-w-0 col-span-2">
+            <label
+              htmlFor="docBgColor"
+              className="text-xs font-medium text-gray-700 block"
+            >
+              Document Background
+            </label>
+            <div className="flex gap-2 mt-1 min-w-0">
+              <input
+                id="docBgColor"
+                type="color"
+                value={template.documentBackgroundColor || "#ffffff"}
+                onChange={(e) => onDocumentBackgroundColorChange?.(e.target.value)}
+                className="text-sm w-10 h-10 border border-gray-300 rounded cursor-pointer flex-shrink-0 mr-2"
+              />
+              <input
+                type="text"
+                value={template.documentBackgroundColor || "#ffffff"}
+                onChange={(e) => onDocumentBackgroundColorChange?.(e.target.value)}
+                className="text-sm border border-gray-300 rounded px-2 py-2 focus:outline-none focus:ring-2 focus:ring-valasys-orange focus:border-transparent flex-1 mr-2"
+                placeholder="#ffffff"
+              />
             </div>
           </div>
         </div>
+      </div>
 
+      {/* Main Working Canvas - Apply 80% Zoom */}
+      <div
+        className="w-full max-w-2xl origin-top transition-all duration-300"
+        style={{
+          transform: "scale(0.8)",
+          transformOrigin: "top center",
+          height: "fit-content",
+        }}
+      >
         {/* Blocks Canvas */}
         <div
           ref={drop}
